@@ -68,6 +68,7 @@ npm start
 
 ### 百度翻译开放平台
 **标准版每月5万字符额度，高级版100万字符额度。**
+
 注册后为标准版，认证后可以切换至高级版，需自己切换，无法自动切。
 说明文档：https://api.fanyi.baidu.com/product/113
 1. 注册开发者信息（https://api.fanyi.baidu.com/ ），获取APPID和秘钥。
