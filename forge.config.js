@@ -1,7 +1,9 @@
+const path = require('node:path')
+
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: '/lib/img/icon.png' // no file extension required
+    icon: path.join(__dirname, 'lib/img/icon.png') // no file extension required
   },
   rebuildConfig: {},
   makers: [
@@ -15,7 +17,11 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          icon: path.join(__dirname, 'lib/img/icon.png')
+        }
+      },
     },
     {
       name: '@electron-forge/maker-rpm',

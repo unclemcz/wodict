@@ -33,7 +33,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
 
   //托盘
-  tray = new Tray('./lib/img/icon.png');
+  tray = new Tray(path.join(__dirname, 'lib/img/icon.png'));
   const contextMenu = Menu.buildFromTemplate([
     {click:(menuItem)=>{
       menuItem.checked = !cfgobj.notification;

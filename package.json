@@ -1,7 +1,7 @@
 {
   "name": "wodict",
   "version": "0.0.1",
-  "description": "A dict based on Electron",
+  "description": "A translator based on Electron",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
