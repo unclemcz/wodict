@@ -7,11 +7,10 @@ const path = require('node:path')
 const cfg = require('./lib/engine/config.js')
 
 let tray = null
-
 let cfgobj = {};
 
 function createWindow () {
-  const  mainWindow = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 350,
     height: 500,
     icon: path.join(__dirname, 'lib/img/icon.png'),
@@ -89,22 +88,29 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
-  console.log("ready to start");
-  cfgobj = cfg.cfgread();
+  const gotTheLock = app.requestSingleInstanceLock();
+  if (!gotTheLock) {
+    console.log("Another instance is already running.");
+    //return false;
+    app.quit();
+  }else{
+    console.log("ready to start");
+    cfgobj = cfg.cfgread();
 
-  Menu.setApplicationMenu(null); // menu null
-  createWindow()
+    Menu.setApplicationMenu(null); // menu null
+    createWindow()
 
-  //监控引擎变化并更新
-  ipcMain.on('change-engine', function (event, engine) {
-    console.log("ipcMain.on change-engine",engine);
-    cfgobj.curengine = engine;
-    cfg.cfgsave(cfgobj);
-  });
+    //监控引擎变化并更新
+    ipcMain.on('change-engine', function (event, engine) {
+      console.log("ipcMain.on change-engine",engine);
+      cfgobj.curengine = engine;
+      cfg.cfgsave(cfgobj);
+    });
 
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
+    app.on('activate', function () {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    })
+  }
 
 })
 
