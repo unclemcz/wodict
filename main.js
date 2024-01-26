@@ -39,7 +39,7 @@ function createWindow () {
       menuItem.checked = !cfgobj.notification;
       cfgobj.notification = !cfgobj.notification;
       console.log(cfgobj.notification);
-    },  label: '翻译通知', type: 'checkbox' },
+    },  label: '翻译通知', type: 'checkbox',checked: cfgobj.notification},
     {click(){mainWindow.show();}, label: '显示窗口', type: 'normal' },
     {click(){mainWindow.destroy();}, label: '退出', type: 'normal' }
   ])
