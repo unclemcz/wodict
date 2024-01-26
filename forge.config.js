@@ -13,13 +13,15 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
+      platforms: ['linux'],
     },
     {
       name: '@electron-forge/maker-deb',
       config: {
         options: {
-          icon: path.join(__dirname, 'lib/img/icon.png')
+          icon: path.join(__dirname, 'lib/img/icon.png'),
+          maintainer: 'mcz',
+          homepage: 'https://github.com/unclemcz/wodict'
         }
       },
     },
