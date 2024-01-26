@@ -21,8 +21,14 @@ git clone https://github.com/unclemcz/wodict.git
 npm install
 npm start
 ```
-### 二进制(暂未提供)
-会提供linux下的二进制可执行文件（x86与arm），其他平台请参考源代码安装方式。
+打包
+```
+npm run make
+```
+
+
+### 二进制
+[releases](https://github.com/unclemcz/wodict/releases)
 
 ## 使用
 运行程序，获取平台授权，将授权信息填入配置文件，然后关闭程序再打开一下，就能使用了。
