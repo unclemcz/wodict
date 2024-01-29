@@ -9,6 +9,8 @@ const cfg = require('./lib/engine/config.js')
 let tray = null
 let cfgobj = {};
 
+let configWindow;
+
 function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 350,
@@ -87,6 +89,28 @@ function createWindow () {
   })
 }
 
+//翻译引擎配置窗口
+function createConfigWindow() {
+  if (!configWindow || configWindow.isDestroyed()) {
+    configWindow = new BrowserWindow({
+      width: 500,
+      height: 350,
+      icon: path.join(__dirname, 'lib/img/icon.png'),
+      //x:0, //left top
+      //y:0,
+      alwaysOnTop:true,
+      webPreferences: {
+        preload: path.join(__dirname, 'preloadjs/config.js')
+      }
+    })
+    configWindow.loadFile('html/config.html')
+  }else{
+    configWindow.focus();
+  }
+  
+}
+
+
 app.whenReady().then(() => {
   const gotTheLock = app.requestSingleInstanceLock();
   if (!gotTheLock) {
@@ -113,6 +137,11 @@ app.whenReady().then(() => {
       const result = await translate.translate(query,engine_type);
       return result;
     });
+    //打开引擎配置窗口
+    ipcMain.handle('open-config', async (event) => {
+      createConfigWindow();
+    });
+
 
     app.on('activate', function () {
       if (BrowserWindow.getAllWindows().length === 0) createWindow()

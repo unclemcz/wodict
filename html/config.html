@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <link href="../styles.css" rel="stylesheet">
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" ></script>
+    <title>wodict翻译引擎配置</title>
+  </head>
+  <body>
+    <div class="container-fluid row g-3">
+      <div class="col-6">
+        <label for="engineselect" class="form-label">设置默认翻译引擎</label>
+        <select id="engineselect" class="form-select">
+          <option selected>Choose...</option>
+          <option>...</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label for="notification" class="form-label">是否推送翻译通知</label>
+        <input type="text" class="form-control" disabled id="notification" value="false">
+      </div>
+
+      <div class="col-12">
+        <span class="badge text-bg-secondary">百度翻译引擎(baidu)</span>
+      </div>
+      <div class="col-6">
+        <input type="text" class="form-control" id="baidu-id" placeholder="appid">
+      </div>
+      <div class="col-6">
+        <input type="text" class="form-control" id="baidu-key" placeholder="key">
+      </div>
+
+      <div class="col-12">
+        <span class="badge text-bg-secondary">有道翻译引擎(youdao)</span>
+      </div>
+      <div class="col-6">
+        <input type="text" class="form-control" id="youdao-id" placeholder="appid">
+      </div>
+      <div class="col-6">
+        <input type="text" class="form-control" id="youdao-key" placeholder="key">
+      </div>
+
+      <div class="col-12 d-grid gap-2 col-6 mx-auto">
+        <button type="submit" class="btn btn-success">保存配置</button>
+      </div>
+    </div>
+    <!-- You can also require other files to run in this process -->
+    <script src="./renderer.js"></script>
+  </body>
+</html>

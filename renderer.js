@@ -51,3 +51,10 @@ btntranslator.addEventListener('click', async () => {
     resulttext.value = result.resulttext;
   }
 })
+
+//打开引擎配置窗口
+const btnconfig = document.getElementById('btnconfig')
+btnconfig.addEventListener('click', async () => {
+   await window.electronAPI.onConfig();
+})
+
