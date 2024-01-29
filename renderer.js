@@ -1,18 +1,12 @@
-/**
- * This file is loaded via the <script> tag in the index.html file and will
- * be executed in the renderer process for that window. No Node.js APIs are
- * available in this process because `nodeIntegration` is turned off and
- * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
- * to expose Node.js functionality from the main process.
- */
+
 
 //翻译剪切板文本
 const origintext = document.getElementById('origintext')
 const resulttext = document.getElementById('resulttext')
 window.electronAPI.onUpdateText((value) => {
   console.log("renderer.js onUpdateText:",value);
-  origintext.innerText = value.origintext.toString();
-  resulttext.innerText = value.resulttext.toString();
+  origintext.value = value.origintext.toString();
+  resulttext.value = value.resulttext.toString();
 });
 
 //填充翻译引擎列表
@@ -46,4 +40,14 @@ engineselect.addEventListener('change', function(event) {
   window.electronAPI.changeEngine(engine);
 });  
 
-
+//点击按钮翻译
+const btntranslator = document.getElementById('btntranslator')
+btntranslator.addEventListener('click', async () => {
+  if (origintext.value == '') {
+    resulttext.value = '源语言为空。';
+  } else {
+    const result = await window.electronAPI.onTranslator(origintext.value);
+    //console.log(result);
+    resulttext.value = result.resulttext;
+  }
+})

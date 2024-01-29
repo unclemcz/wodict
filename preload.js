@@ -11,7 +11,8 @@ const { contextBridge, ipcRenderer } = require('electron/renderer')
 contextBridge.exposeInMainWorld('electronAPI', {
   onUpdateText: (callback) => ipcRenderer.on('update-text', (_event, value) => callback(value)),
   onEngineList: (callback) => ipcRenderer.on('enginelist', (_event, value) => callback(value)),
-  changeEngine: (engine) => ipcRenderer.send('change-engine', engine)
+  changeEngine: (engine) => ipcRenderer.send('change-engine', engine),
+  onTranslator: (query) => ipcRenderer.invoke('translator',query),
 })
 
 

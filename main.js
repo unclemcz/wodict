@@ -17,7 +17,7 @@ function createWindow () {
     x:0, //left top
     //x:screen.getPrimaryDisplay().workAreaSize.width -350 , //right top
     y:0,
-    resizable:false,
+    //resizable:false,
     alwaysOnTop:true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
@@ -105,6 +105,13 @@ app.whenReady().then(() => {
       console.log("ipcMain.on change-engine",engine);
       cfgobj.curengine = engine;
       cfg.cfgsave(cfgobj);
+    });
+
+    //监控翻译按钮并反馈结果
+    ipcMain.handle('translator', async (event,query) => {
+      const engine_type = cfgobj.curengine;
+      const result = await translate.translate(query,engine_type);
+      return result;
     });
 
     app.on('activate', function () {
