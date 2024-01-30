@@ -28,6 +28,11 @@ npm run make
 [releases](https://github.com/unclemcz/wodict/releases)
 
 ## 使用
+### 图形界面配置
+打开配置窗口，填入参数即可。
+![配置窗口](./readme/config.png)
+
+### 通过配置文件配置
 运行程序，获取平台授权，将授权信息填入配置文件，然后关闭程序再打开一下，就能使用了。
 
 ### 配置文件说明
