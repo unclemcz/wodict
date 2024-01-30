@@ -12,6 +12,7 @@ window.electronAPI.onUpdateText((value) => {
 //填充翻译引擎列表
 const engineselect = document.getElementById('engineselect')
 window.electronAPI.onEngineList((value) => {
+  engineselect.options.length = 0;
   const curengine = value.curengine;
   for (const key in value) {
     if (value[key].name) {

@@ -10,6 +10,7 @@ let tray = null
 let cfgobj = {};
 
 let configWindow;
+let mainWindow_clone;
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
@@ -19,12 +20,13 @@ function createWindow () {
     x:0, //left top
     //x:screen.getPrimaryDisplay().workAreaSize.width -350 , //right top
     y:0,
-    //resizable:false,
+    resizable:false,
     alwaysOnTop:true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
-  })
+  });
+  mainWindow_clone = mainWindow;
   mainWindow.on('close', (event) => {
     mainWindow.hide();
     mainWindow.setSkipTaskbar(true);
@@ -42,7 +44,7 @@ function createWindow () {
       console.log(cfgobj.notification);
     },  label: '翻译通知', type: 'checkbox',checked: cfgobj.notification},
     {click(){mainWindow.show();}, label: '显示窗口', type: 'normal' },
-    {click(){mainWindow.destroy();}, label: '退出', type: 'normal' }
+    {click(){mainWindow.destroy();app.quit();}, label: '退出', type: 'normal' }
   ])
   tray.setContextMenu(contextMenu);
   tray.on('click', ()=> {
@@ -74,7 +76,8 @@ function createWindow () {
     onTextChange: async function (text) { 
       console.log(text);
       const engine_type = cfgobj.curengine;
-      const result = await translate.translate(text,engine_type);
+      const engine = cfgobj[engine_type];
+      const result = await translate.translate(text,engine_type,engine);
       mainWindow.webContents.send('update-text', result);
       //通知显示，可配置
       if (cfgobj.notification==true) {
@@ -93,19 +96,27 @@ function createWindow () {
 function createConfigWindow() {
   if (!configWindow || configWindow.isDestroyed()) {
     configWindow = new BrowserWindow({
-      width: 500,
-      height: 350,
+      width: 800,
+      height: 500,
       icon: path.join(__dirname, 'lib/img/icon.png'),
       //x:0, //left top
       //y:0,
+      //resizable:false,
       alwaysOnTop:true,
       webPreferences: {
         preload: path.join(__dirname, 'preloadjs/config.js')
       }
     })
-    configWindow.loadFile('html/config.html')
+    configWindow.loadFile('html/config.html');
+    
+    //configWindow.webContents.openDevTools();
+    //
+    configWindow.webContents.on('did-finish-load', () => {  
+      configWindow.webContents.send('enginelist', cfgobj);
+    });  
   }else{
     configWindow.focus();
+    configWindow.show();
   }
   
 }
@@ -134,12 +145,28 @@ app.whenReady().then(() => {
     //监控翻译按钮并反馈结果
     ipcMain.handle('translator', async (event,query) => {
       const engine_type = cfgobj.curengine;
-      const result = await translate.translate(query,engine_type);
+      const engine = cfgobj[engine_type];
+      const result = await translate.translate(query,engine_type,engine);
       return result;
     });
+
     //打开引擎配置窗口
     ipcMain.handle('open-config', async (event) => {
       createConfigWindow();
+    });
+
+    //保存配置窗口的引擎配置
+    ipcMain.on('save-cfg', async (event,cfg_t) => {
+      const curengine = cfgobj.curengine;
+      for (const key in cfg_t) {
+        cfgobj[key] = cfg_t[key];
+        //console.log(cfg[key]);
+        if (cfgobj[curengine].key=='' &&  cfgobj[key].key!= '') {
+          cfgobj.curengine = key;
+        }
+      }
+      cfg.cfgsave(cfgobj);
+      mainWindow_clone.webContents.send('enginelist', cfgobj);
     });
 
 
