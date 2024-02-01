@@ -97,7 +97,7 @@ function createConfigWindow() {
   if (!configWindow || configWindow.isDestroyed()) {
     configWindow = new BrowserWindow({
       width: 800,
-      height: 500,
+      height: 720,
       icon: path.join(__dirname, 'lib/img/icon.png'),
       //x:0, //left top
       //y:0,

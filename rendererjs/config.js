@@ -18,6 +18,13 @@ const alibaseid = document.getElementById('alibase-id');
 const alibasekey = document.getElementById('alibase-key');
 const alibasename = document.getElementById('alibase-name');
 
+const volcid = document.getElementById('volc-id');
+const volckey = document.getElementById('volc-key');
+const volcname = document.getElementById('volc-name');
+
+const huaweiid = document.getElementById('huawei-id');
+const huaweikey = document.getElementById('huawei-key');
+const huaweiname = document.getElementById('huawei-name');
 
 window.electronAPI.onEngineList((value) => {
   for (const key in value) {
@@ -39,6 +46,14 @@ window.electronAPI.onEngineList((value) => {
             alibaseid.value = value[key].appid;
             alibasekey.value = value[key].key;
             break;
+        case "volc":
+          volcid.value = value[key].appid;
+          volckey.value = value[key].key;
+          break;
+          case "huawei":
+            huaweiid.value = value[key].appid;
+            huaweikey.value = value[key].key;
+            break;
         default:
             break;
       }
@@ -54,6 +69,8 @@ btnsavecfg.addEventListener('click', async () => {
   cfg.youdao = {"name":youdaoname.innerText,"appid":youdaoid.value,"key":youdaokey.value};
   cfg.tencent = {"name":tencentname.innerText,"appid":tencentid.value,"key":tencentkey.value};
   cfg.alibase = {"name":alibasename.innerText,"appid":alibaseid.value,"key":alibasekey.value};
+  cfg.volc = {"name":volcname.innerText,"appid":volcid.value,"key":volckey.value};
+  cfg.huawei = {"name":huaweiname.innerText,"appid":huaweiid.value,"key":huaweikey.value};
   //console.log(cfg)
   window.electronAPI.onSaveCfg(cfg);
   window.close();
