@@ -59,3 +59,8 @@ btnconfig.addEventListener('click', async () => {
    await window.electronAPI.onConfig();
 })
 
+//打开关于窗口
+const btnabout = document.getElementById('btnabout')
+btnabout.addEventListener('click', async () => {
+   await window.electronAPI.onAbout();
+})

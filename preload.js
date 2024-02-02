@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   changeEngine: (engine) => ipcRenderer.send('change-engine', engine),
   onTranslator: (query) => ipcRenderer.invoke('translator',query),
   onConfig:()=>ipcRenderer.invoke('open-config'),
+  onAbout:()=>ipcRenderer.send('open-about'),
 })
 
 

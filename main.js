@@ -10,12 +10,13 @@ let tray = null
 let cfgobj = {};
 
 let configWindow;
+let aboutWindow;
 let mainWindow_clone;
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 350,
-    height: 500,
+    height: 520,
     icon: path.join(__dirname, 'lib/img/icon.png'),
     x:0, //left top
     //x:screen.getPrimaryDisplay().workAreaSize.width -350 , //right top
@@ -118,9 +119,35 @@ function createConfigWindow() {
     configWindow.focus();
     configWindow.show();
   }
-  
 }
 
+//关于窗口
+function createAboutWindow() {
+  if (!aboutWindow || aboutWindow.isDestroyed()) {
+    aboutWindow = new BrowserWindow({
+      width: 400,
+      height: 420,
+      icon: path.join(__dirname, 'lib/img/icon.png'),
+      //x:0, //left top
+      //y:0,
+      resizable:false,
+      alwaysOnTop:true,
+      webPreferences: {
+        preload: path.join(__dirname, 'preloadjs/about.js')
+      }
+    })
+    aboutWindow.loadFile('html/about.html');
+    
+    //aboutWindow.webContents.openDevTools();
+    //
+    aboutWindow.webContents.on('did-finish-load', () => {  
+      aboutWindow.webContents.send('app-version', app.getVersion());
+    });
+  }else{
+    aboutWindow.focus();
+    aboutWindow.show();
+  }
+}
 
 app.whenReady().then(() => {
   const gotTheLock = app.requestSingleInstanceLock();
@@ -153,6 +180,10 @@ app.whenReady().then(() => {
     //打开引擎配置窗口
     ipcMain.handle('open-config', async (event) => {
       createConfigWindow();
+    });
+    //打开关于窗口
+    ipcMain.on('open-about', async (event) => {
+      createAboutWindow();
     });
 
     //保存配置窗口的引擎配置
