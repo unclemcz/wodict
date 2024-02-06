@@ -1,3 +1,21 @@
 /* styles.css */
 
 /* Add styles here to customize the appearance of your app */
+
+body {
+    -webkit-app-region: drag;
+}
+/* 
+button {
+    -webkit-app-region: no-drag;
+}
+
+/* textarea{
+    -webkit-app-region: no-drag;
+} */
+
+/* 
+select{
+    -webkit-app-region: no-drag;
+}
+ */

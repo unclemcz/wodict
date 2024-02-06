@@ -15,24 +15,38 @@ let mainWindow_clone;
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
+    //frame: false,
     width: 350,
     height: 520,
+    //useContentSize:true,
+    hasShadow:false,
     icon: path.join(__dirname, 'lib/img/icon.png'),
-    x:0, //left top
-    //x:screen.getPrimaryDisplay().workAreaSize.width -350 , //right top
-    y:0,
+    //x:0, //left top
+    //x:screen.getPrimaryDisplay().workAreaSize.width-350, //right top
+    //y:-100,
     resizable:false,
     alwaysOnTop:true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   });
+  console.log('screen',screen.getPrimaryDisplay().workAreaSize.width);
   mainWindow_clone = mainWindow;
   mainWindow.on('close', (event) => {
     mainWindow.hide();
     mainWindow.setSkipTaskbar(true);
     event.preventDefault();
-  })
+  });
+
+
+  //
+  // mainWindow.on('move', (event) => {  
+  //   console.log(mainWindow.getBounds());  
+  //   console.log(mainWindow.getSize());  
+  //   console.log(mainWindow.getContentSize());  
+  //   mainWindow.setPosition(1800,-100)
+
+  // });
 
   mainWindow.loadFile('index.html')
 
@@ -40,9 +54,21 @@ function createWindow () {
   tray = new Tray(path.join(__dirname, 'lib/img/icon.png'));
   const contextMenu = Menu.buildFromTemplate([
     {click:(menuItem)=>{
+      if (cfgobj.into || cfgobj.into==true) {
+        cfgobj.into=false;
+        if (mainWindow.getBounds().x<0) {
+          mainWindow.setPosition(-5,0)
+        }
+      }else{
+        cfgobj.into=true;
+      }
+      //menuItem.checked = !cfgobj.into;
+      console.log("是否隐入",cfgobj.into,"menuItem.checked",menuItem.checked);
+    },  label: '隐入左上角', type: 'checkbox',checked: false},
+    {click:(menuItem)=>{
       menuItem.checked = !cfgobj.notification;
       cfgobj.notification = !cfgobj.notification;
-      console.log(cfgobj.notification);
+      console.log("是否翻译通知",cfgobj.notification);
     },  label: '翻译通知', type: 'checkbox',checked: cfgobj.notification},
     {click(){mainWindow.show();}, label: '显示窗口', type: 'normal' },
     {click(){mainWindow.destroy();app.quit();}, label: '退出', type: 'normal' }
@@ -121,7 +147,7 @@ function createConfigWindow() {
   }
 }
 
-//关于窗口
+//'关于'窗口
 function createAboutWindow() {
   if (!aboutWindow || aboutWindow.isDestroyed()) {
     aboutWindow = new BrowserWindow({
@@ -167,6 +193,39 @@ app.whenReady().then(() => {
       console.log("ipcMain.on change-engine",engine);
       cfgobj.curengine = engine;
       cfg.cfgsave(cfgobj);
+    });
+
+
+    ipcMain.on('mouse-act', function (event, act) {
+      if (cfgobj.into) {
+        let bound = mainWindow_clone.getBounds();
+        let pos_x = bound.x;
+        let pos_y = bound.y;
+        let width = bound.width;
+        let area_size = screen.getPrimaryDisplay().workAreaSize.width;
+        //console.log(JSON.stringify(event));
+        console.log(act,"pos_x",pos_x,"pos_y",pos_y,"width",width,"area_size",area_size);
+        console.log(bound);
+        console.log(mainWindow_clone.getContentSize());
+        console.log(mainWindow_clone.getContentBounds());
+        console.log(mainWindow_clone.getSize())
+  
+        // //console.log(act);
+        if (act=='mouseleave') {
+          if (pos_x<0) {
+            console.log("mouseleave setPosition")
+            mainWindow_clone.setPosition(0-width+5,0)
+          }
+        }else if(act=='mouseenter'){
+          if (pos_x<0) {
+            console.log("mouseenter setPosition")
+            mainWindow_clone.setPosition(-5,0)
+          }
+        }        
+      }else{
+        console.log("无需隐入，当前状态：",cfgobj.into);
+      }
+
     });
 
     //监控翻译按钮并反馈结果

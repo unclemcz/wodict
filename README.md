@@ -13,6 +13,8 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 ## 效果
 ### 主面板
 ![wodict](./readme/screenshot1.gif)
+### 隐入左上角
+![wodict](./readme/screenshot3.gif)
 ### 翻译通知
 ![wodict](./readme/screenshot2.gif)
 
@@ -95,7 +97,7 @@ npm run make
 
 ### 网易有道翻译
 **无定期免费额度，新用户赠送一定额度，用完即止**
-> 注意：有道翻译同样有吃字的问题。
+> 注意：有道翻译同样有吃字的问题，注册后会收到推销电话。
 1. 注册 https://ai.youdao.com/product-fanyi-text.s ，认证用户。
 2. 创建应用，服务选项选择文本翻译。
 3. 将步骤2中的应用ID和秘钥填入配置窗口。
@@ -125,7 +127,7 @@ npm run make
 
 ### 华为机器文本翻译
 **每月100万字符免费使用额度**
-> 注意：认证需要银行卡或者人脸认证。
+> 注意：认证需要银行卡或者人脸认证，注册后会收到客服电话。
 
 介绍：https://www.huaweicloud.com/product/nlpmt.html
 1. 注册认证开通：https://console.huaweicloud.com/nlp/#/nlp/overview

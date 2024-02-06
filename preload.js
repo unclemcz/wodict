@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onTranslator: (query) => ipcRenderer.invoke('translator',query),
   onConfig:()=>ipcRenderer.invoke('open-config'),
   onAbout:()=>ipcRenderer.send('open-about'),
+  onMouseAct: (mouse_event) => ipcRenderer.send('mouse-act', mouse_event),
 })
 
 

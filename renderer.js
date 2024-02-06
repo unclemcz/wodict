@@ -64,3 +64,17 @@ const btnabout = document.getElementById('btnabout')
 btnabout.addEventListener('click', async () => {
    await window.electronAPI.onAbout();
 })
+
+
+//捕获鼠标进出事件
+document.documentElement.addEventListener('mouseenter', (event) => {  
+  //console.log('鼠标进入了窗口');  
+  window.electronAPI.onMouseAct('mouseenter');
+});  
+
+document.documentElement.addEventListener('mouseleave', (event) => {  
+  //console.log('鼠标离开了窗口');  
+  window.electronAPI.onMouseAct('mouseleave');
+});
+
+
