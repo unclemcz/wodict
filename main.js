@@ -204,11 +204,11 @@ app.whenReady().then(() => {
         let width = bound.width;
         let area_size = screen.getPrimaryDisplay().workAreaSize.width;
         //console.log(JSON.stringify(event));
-        console.log(act,"pos_x",pos_x,"pos_y",pos_y,"width",width,"area_size",area_size);
-        console.log(bound);
-        console.log(mainWindow_clone.getContentSize());
-        console.log(mainWindow_clone.getContentBounds());
-        console.log(mainWindow_clone.getSize())
+        // console.log(act,"pos_x",pos_x,"pos_y",pos_y,"width",width,"area_size",area_size);
+        // console.log(bound);
+        // console.log(mainWindow_clone.getContentSize());
+        // console.log(mainWindow_clone.getContentBounds());
+        // console.log(mainWindow_clone.getSize())
   
         // //console.log(act);
         if (act=='mouseleave') {
