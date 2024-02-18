@@ -50,24 +50,47 @@ function createWindow () {
 
   mainWindow.loadFile('index.html')
 
+  //判断配置表中的非关键参数，如果为空，则置初始值
+  if (!cfgobj.autotranslate) {
+    cfgobj.autotranslate=true;
+  }
+  if (!cfgobj.wininto) {
+    cfgobj.wininto=false;
+  }
+  //根据配置设置托盘图片路径
+  const iconpath = cfgobj.autotranslate ? path.join(__dirname, 'lib/img/icon.png') : path.join(__dirname, 'lib/img/icongrey.png');
   //托盘
-  tray = new Tray(path.join(__dirname, 'lib/img/icon.png'));
+  tray = new Tray(iconpath);
+
+
   const contextMenu = Menu.buildFromTemplate([
     {click:(menuItem)=>{
-      if (cfgobj.into || cfgobj.into==true) {
-        cfgobj.into=false;
+      if (cfgobj.autotranslate || cfgobj.autotranslate==true) {
+        cfgobj.autotranslate=false;
+        tray.setImage(path.join(__dirname, 'lib/img/icongrey.png'));
+      }else{
+        cfgobj.autotranslate=true;
+        tray.setImage(path.join(__dirname, 'lib/img/icon.png'));
+      }
+      menuItem.checked = cfgobj.autotranslate;
+      //cfgobj.autotranslate = !cfgobj.autotranslate;
+      console.log("是否自动翻译",cfgobj.autotranslate);
+    },  label: '自动翻译', type: 'checkbox',checked: cfgobj.autotranslate},
+    {click:(menuItem)=>{
+      if (cfgobj.wininto || cfgobj.wininto==true) {
+        cfgobj.wininto=false;
         if (mainWindow.getBounds().x<0) {
           mainWindow.setPosition(-5,0)
         }
       }else{
-        cfgobj.into=true;
+        cfgobj.wininto=true;
       }
-      //menuItem.checked = !cfgobj.into;
-      console.log("是否隐入",cfgobj.into,"menuItem.checked",menuItem.checked);
-    },  label: '隐入左上角', type: 'checkbox',checked: false},
+      //menuItem.checked = !cfgobj.wininto;
+      console.log("是否隐入",cfgobj.wininto,"menuItem.checked",menuItem.checked);
+    },  label: '侧边吸附(左上角)', type: 'checkbox',checked: cfgobj.wininto},
     {click:(menuItem)=>{
-      menuItem.checked = !cfgobj.notification;
       cfgobj.notification = !cfgobj.notification;
+      menuItem.checked = cfgobj.notification;
       console.log("是否翻译通知",cfgobj.notification);
     },  label: '翻译通知', type: 'checkbox',checked: cfgobj.notification},
     {click(){mainWindow.show();}, label: '显示窗口', type: 'normal' },
@@ -102,9 +125,15 @@ function createWindow () {
     watchDelay: 1000,
     onTextChange: async function (text) { 
       console.log(text);
-      const engine_type = cfgobj.curengine;
-      const engine = cfgobj[engine_type];
-      const result = await translate.translate(text,engine_type,engine);
+      let result = {};
+      if (cfgobj.autotranslate) {
+        const engine_type = cfgobj.curengine;
+        const engine = cfgobj[engine_type];
+        result = await translate.translate(text,engine_type,engine);
+      } else {
+        result = {"origintext":text,"resulttext":"自动翻译功能未开启，开启后才能监测剪切板并翻译哦。"};;
+      }
+
       mainWindow.webContents.send('update-text', result);
       //通知显示，可配置
       if (cfgobj.notification==true) {
@@ -197,7 +226,7 @@ app.whenReady().then(() => {
 
 
     ipcMain.on('mouse-act', function (event, act) {
-      if (cfgobj.into) {
+      if (cfgobj.wininto) {
         let bound = mainWindow_clone.getBounds();
         let pos_x = bound.x;
         let pos_y = bound.y;
@@ -223,7 +252,7 @@ app.whenReady().then(() => {
           }
         }        
       }else{
-        console.log("无需隐入，当前状态：",cfgobj.into);
+        console.log("无需隐入，当前状态：",cfgobj.wininto);
       }
 
     });
