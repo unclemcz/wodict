@@ -24,7 +24,7 @@ function createWindow () {
     //x:0, //left top
     //x:screen.getPrimaryDisplay().workAreaSize.width-350, //right top
     //y:-100,
-    resizable:false,
+    //resizable:false,
     alwaysOnTop:true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
@@ -47,6 +47,7 @@ function createWindow () {
   //   mainWindow.setPosition(1800,-100)
 
   // });
+
 
   mainWindow.loadFile('index.html')
 

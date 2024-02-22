@@ -3,10 +3,19 @@
 //翻译剪切板文本
 const origintext = document.getElementById('origintext')
 const resulttext = document.getElementById('resulttext')
+const audiosource = document.getElementById('audiosource')
+const btnaudio = document.getElementById('btnaudio')
 window.electronAPI.onUpdateText((value) => {
   console.log("renderer.js onUpdateText:",value);
   origintext.value = value.origintext.toString();
   resulttext.value = value.resulttext.toString();
+  if (value.voice && value.voice.toString() != '') {
+    audiosource.setAttribute('src', value.voice.toString());
+    //btnaudio.style.display = '';
+    btnaudio.disabled = false;
+  }else{
+    btnaudio.disabled = true;
+  }
 });
 
 //填充翻译引擎列表
@@ -50,6 +59,13 @@ btntranslator.addEventListener('click', async () => {
     const result = await window.electronAPI.onTranslator(origintext.value);
     //console.log(result);
     resulttext.value = result.resulttext;
+    if (result.voice && result.voice.toString() != '') {
+      audiosource.setAttribute('src', result.voice.toString());
+
+      btnaudio.disabled = false;
+    }else{
+      btnaudio.disabled = true;
+    }
   }
 })
 
@@ -77,4 +93,15 @@ document.documentElement.addEventListener('mouseleave', (event) => {
   window.electronAPI.onMouseAct('mouseleave');
 });
 
+
+//播放单词语音
+//const btnaudio = document.getElementById('btnaudio');
+const audioplayer = document.getElementById('audioplayer');
+btnaudio.addEventListener('click', async () => {
+  const audiosource = document.getElementById('audiosource');
+  if (audiosource.getAttribute('src') != ''){
+    await audioplayer.load();
+    audioplayer.play();
+  }
+})
 
