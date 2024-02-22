@@ -103,7 +103,7 @@ npm run make
 **无定期免费额度，新用户赠送一定额度，用完即止**
 > 注意：有道翻译同样有吃字的问题，注册后会收到推销电话。
 1. 注册 https://ai.youdao.com/product-fanyi-text.s ，认证用户。
-2. 创建应用，服务选项选择文本翻译。
+2. 创建应用，服务选项选择文本翻译，如果需要朗读，还需开通语音合成服务。
 3. 将步骤2中的应用ID和秘钥填入配置窗口。
 
 ### 腾讯机器文本翻译
@@ -145,6 +145,16 @@ npm run make
 ```
 async function translate(query,engine) {
     //todo
+    //返回一个结果结构体
+}
+```
+**结构体格式**
+origintext: 原始文本，resulttext: 翻译后的文本，voice: 原始文本的语音合成文件链接（可选）。
+```
+{
+    origintext:"",
+    resulttext:"",
+    voice:""
 }
 ```
 2. 修改~/.config/wodict/config.json，补充新引擎的秘钥信息。
