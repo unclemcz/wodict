@@ -6,6 +6,9 @@ const translate = require('./lib/engine/translate.js')
 const path = require('node:path')
 const cfg = require('./lib/engine/config.js')
 
+const ollama = require('./lib/engine/ollama.js');
+
+
 let tray = null
 let cfgobj = {};
 
@@ -105,19 +108,6 @@ function createWindow () {
   //mainWindow.webContents.openDevTools();
 
   //发送引擎列表到页面
-  // let enginelist = (function (obj) {
-  //   let tmp = obj;
-  //   for (let key in tmp) {
-  //     if (tmp[key].name) {
-  //       delete tmp[key].appid;
-  //       delete tmp[key].key;
-  //     }
-  //   }
-  //   return tmp;
-  // })(cfgobj);
-  // console.log(enginelist);
-  //console.log("main.js",cfgobj)
-
   mainWindow.webContents.on('did-finish-load', () => {  
     mainWindow.webContents.send('enginelist', cfgobj);
   });  
@@ -130,12 +120,18 @@ function createWindow () {
       if (cfgobj.autotranslate) {
         const engine_type = cfgobj.curengine;
         const engine = cfgobj[engine_type];
-        result = await translate.translate(text,engine_type,engine);
-      } else {
-        result = {"origintext":text,"resulttext":"自动翻译功能未开启，开启后才能监测剪切板并翻译哦。"};;
+        if (engine_type == "ollama") {
+          await ollama.translate(text,engine,mainWindow);
+        } else {
+          result = await translate.translate(text,engine_type,engine);
+          mainWindow.webContents.send('update-text', result);
+        }
+        
+      } else {                          
+        result = {"origintext":text,"resulttext":"自动翻译功能未开启，开启后才能监测剪切板并翻译哦。"};
+        mainWindow.webContents.send('update-text', result);
       }
-
-      mainWindow.webContents.send('update-text', result);
+      
       //通知显示，可配置
       if (cfgobj.notification==true) {
         new Notification({
@@ -154,7 +150,7 @@ function createConfigWindow() {
   if (!configWindow || configWindow.isDestroyed()) {
     configWindow = new BrowserWindow({
       width: 800,
-      height: 720,
+      height: 400,
       icon: path.join(__dirname, 'lib/img/icon.png'),
       //x:0, //left top
       //y:0,

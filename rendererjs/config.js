@@ -26,6 +26,11 @@ const huaweiid = document.getElementById('huawei-id');
 const huaweikey = document.getElementById('huawei-key');
 const huaweiname = document.getElementById('huawei-name');
 
+const ollamaurl = document.getElementById('ollama-url');
+const ollamamodel = document.getElementById('ollama-model');
+const ollamaname = document.getElementById('ollama-name');
+
+
 window.electronAPI.onEngineList((value) => {
   for (const key in value) {
     if (value[key].name) {
@@ -50,10 +55,14 @@ window.electronAPI.onEngineList((value) => {
           volcid.value = value[key].appid;
           volckey.value = value[key].key;
           break;
-          case "huawei":
-            huaweiid.value = value[key].appid;
-            huaweikey.value = value[key].key;
-            break;
+        case "huawei":
+          huaweiid.value = value[key].appid;
+          huaweikey.value = value[key].key;
+          break;
+        case "ollama":
+          ollamaurl.value = value[key].url;
+          ollamamodel.value = value[key].model;
+          break;
         default:
             break;
       }
@@ -71,6 +80,7 @@ btnsavecfg.addEventListener('click', async () => {
   cfg.alibase = {"name":alibasename.innerText,"appid":alibaseid.value,"key":alibasekey.value};
   cfg.volc = {"name":volcname.innerText,"appid":volcid.value,"key":volckey.value};
   cfg.huawei = {"name":huaweiname.innerText,"appid":huaweiid.value,"key":huaweikey.value};
+  cfg.ollama = {"name":ollamaname.innerText,"url":ollamaurl.value,"model":ollamamodel.value};
   //console.log(cfg)
   window.electronAPI.onSaveCfg(cfg);
   window.close();
