@@ -6,8 +6,6 @@ const translate = require('./lib/engine/translate.js')
 const path = require('node:path')
 const cfg = require('./lib/engine/config.js')
 
-const ollama = require('./lib/engine/ollama.js');
-
 
 let tray = null
 let cfgobj = {};
@@ -40,17 +38,6 @@ function createWindow () {
     mainWindow.setSkipTaskbar(true);
     event.preventDefault();
   });
-
-
-  //
-  // mainWindow.on('move', (event) => {  
-  //   console.log(mainWindow.getBounds());  
-  //   console.log(mainWindow.getSize());  
-  //   console.log(mainWindow.getContentSize());  
-  //   mainWindow.setPosition(1800,-100)
-
-  // });
-
 
   mainWindow.loadFile('index.html')
 
@@ -105,7 +92,7 @@ function createWindow () {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
   });
   
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   //发送引擎列表到页面
   mainWindow.webContents.on('did-finish-load', () => {  
@@ -120,18 +107,11 @@ function createWindow () {
       if (cfgobj.autotranslate) {
         const engine_type = cfgobj.curengine;
         const engine = cfgobj[engine_type];
-        if (engine_type == "ollama") {
-          await ollama.translate(text,engine,mainWindow);
-        } else {
-          result = await translate.translate(text,engine_type,engine);
-          mainWindow.webContents.send('update-text', result);
-        }
-        
+        await translate.translate(text,engine_type,engine,mainWindow);
       } else {                          
         result = {"origintext":text,"resulttext":"自动翻译功能未开启，开启后才能监测剪切板并翻译哦。"};
         mainWindow.webContents.send('update-text', result);
       }
-      
       //通知显示，可配置
       if (cfgobj.notification==true) {
         new Notification({
@@ -254,12 +234,19 @@ app.whenReady().then(() => {
 
     });
 
-    //监控翻译按钮并反馈结果
+    //监控翻译按钮并反馈结果 已停用
     ipcMain.handle('translator', async (event,query) => {
       const engine_type = cfgobj.curengine;
       const engine = cfgobj[engine_type];
       const result = await translate.translate(query,engine_type,engine);
       return result;
+    });
+    //监控翻译按钮  为了兼容大模型的流式数据返回 translator->translatorV2
+    ipcMain.on('translatorV2', async (event, query) => {
+      //console.log("translatorV2");
+      const engine_type = cfgobj.curengine;
+      const engine = cfgobj[engine_type];
+      await translate.translate(query,engine_type,engine,mainWindow_clone);
     });
 
     //打开引擎配置窗口

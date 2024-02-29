@@ -67,21 +67,6 @@ npm run make
         "appid":"",
         "key":""
     },
-    "youdao":{
-        "name":"网易有道文本翻译",
-        "appid":"",
-        "key":""
-    },
-    "tencent":{
-        "name":"腾讯机器文本翻译",
-        "appid":"",
-        "key":""
-    },
-    "alibase":{
-        "name":"阿里机器文本翻译",
-        "appid":"",
-        "key":""
-    }
 }
 ```
 
@@ -138,31 +123,56 @@ npm run make
 2. 新建秘钥 https://console.huaweicloud.com/iam/#/mine/accessKey
 3. 将步骤2中生成的Id和key填入配置中。
 
+### ollama大模型工具
+**需要本地化搭建**
+> wodict仅在qwen下测试。
+
+介绍：https://ollama.com/
+1. 按照ollama网站安装说明安装ollama和自己的大模型，例如qwen。
+2. 确认ollama正常运行。
+3. 将url和对应模型填入配置中。url默认为`http://127.0.0.1:11434/`,模型可参考ollama的网站，例如`qwen`、`qwen:7b`等。
+
+
 
 ## 增加引擎支持
 欢迎通过pr的方式增加翻译引擎支持，说明：
 1. 在lib/engine/下增加一个js文件，文件名建议为该引擎的公司名字，例如xxx.js，对外暴露一个translate()的异步函数。
 ```
-async function translate(query,engine) {
+async function translate(text,type,engine,win) {
     //todo
-    //返回一个结果结构体
+    //生成一个结果结构体 发送到win窗口
 }
 ```
 **结构体格式**
-origintext: 原始文本，resulttext: 翻译后的文本，voice: 原始文本的语音合成文件链接（可选）。
+
+origintext: 原始文本
+
+resulttext: 翻译后的文本
+
+voice: 原始文本的语音合成文件链接（可选）
+
+done:标记翻译是否已完成，为了兼容ollama引入，true为完成，false为未完成，false时翻译按钮会变灰，true时翻译按钮会变亮（可选）
 ```
 {
     origintext:"",
     resulttext:"",
-    voice:""
+    voice:"",
+    done:""
 }
 ```
 2. 修改~/.config/wodict/config.json，补充新引擎的秘钥信息。
 ```
+# 普通翻译配置
 "xxx":{
     "name":"xxxname",
     "appid":"",
     "key":""
+}
+# 大模型配置
+"xxx":{
+    "name":"xxxname",
+    "url":"",
+    "model":""
 }
 ```
 3. 修改lib/engine/translate.js，添加对新引擎的支持。
@@ -178,7 +188,6 @@ async function translate(text,type,engine) {
     }else{
         result = {"origintext":text,"resulttext":"当前选择的翻译引擎为["+type+"]，还未配置，请先配置翻译引擎参数。"};
     }
-    return result;
 }
 ```
 4. 配置页面新增引擎元素 ./html/config.html
@@ -239,7 +248,6 @@ btnsavecfg.addEventListener('click', async () => {
 
 
 ## 还未支持的列表
-欢迎通过提交pr方式增加支持。
 
 ### 微软Azure翻译
 ### amazon

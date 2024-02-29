@@ -12,7 +12,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onUpdateText: (callback) => ipcRenderer.on('update-text', (_event, value) => callback(value)),
   onEngineList: (callback) => ipcRenderer.on('enginelist', (_event, value) => callback(value)),
   changeEngine: (engine) => ipcRenderer.send('change-engine', engine),
-  onTranslator: (query) => ipcRenderer.invoke('translator',query),
+  onTranslator: (query) => ipcRenderer.invoke('translator',query),//双向  已停用
+  onTranslatorV2: (query) => ipcRenderer.send('translatorV2',query),//渲染进程->主进程  替代translator
   onConfig:()=>ipcRenderer.invoke('open-config'),
   onAbout:()=>ipcRenderer.send('open-about'),
   onMouseAct: (mouse_event) => ipcRenderer.send('mouse-act', mouse_event),

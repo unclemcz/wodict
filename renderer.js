@@ -1,12 +1,13 @@
 
 
 //翻译剪切板文本
+const btntranslator = document.getElementById('btntranslator')
 const origintext = document.getElementById('origintext')
 const resulttext = document.getElementById('resulttext')
 const audiosource = document.getElementById('audiosource')
 const btnaudio = document.getElementById('btnaudio')
 window.electronAPI.onUpdateText((value) => {
-  console.log("renderer.js onUpdateText:",value);
+  console.log("renderer.js onUpdateText:",value,value.done);
   origintext.value = value.origintext.toString();
   resulttext.value = value.resulttext.toString();
   if (value.voice && value.voice.toString() != '') {
@@ -15,6 +16,12 @@ window.electronAPI.onUpdateText((value) => {
     btnaudio.disabled = false;
   }else{
     btnaudio.disabled = true;
+  }
+  if (value.done == undefined) value.done = true; 
+  if (value.done == false){
+    btntranslator.disabled = true;
+  }else {
+    btntranslator.disabled = false;
   }
 });
 
@@ -51,23 +58,30 @@ engineselect.addEventListener('change', function(event) {
 });  
 
 //点击按钮翻译
-const btntranslator = document.getElementById('btntranslator')
+
 btntranslator.addEventListener('click', async () => {
   if (origintext.value == '') {
     resulttext.value = '源语言为空。';
   } else {
-    const result = await window.electronAPI.onTranslator(origintext.value);
-    //console.log(result);
-    resulttext.value = result.resulttext;
-    if (result.voice && result.voice.toString() != '') {
-      audiosource.setAttribute('src', result.voice.toString());
-
-      btnaudio.disabled = false;
-    }else{
-      btnaudio.disabled = true;
-    }
+    await window.electronAPI.onTranslatorV2(origintext.value);
   }
 })
+// btntranslator.addEventListener('click', async () => {
+//   if (origintext.value == '') {
+//     resulttext.value = '源语言为空。';
+//   } else {
+//     const result = await window.electronAPI.onTranslator(origintext.value);
+//     //console.log(result);
+//     resulttext.value = result.resulttext;
+//     if (result.voice && result.voice.toString() != '') {
+//       audiosource.setAttribute('src', result.voice.toString());
+
+//       btnaudio.disabled = false;
+//     }else{
+//       btnaudio.disabled = true;
+//     }
+//   }
+// })
 
 //打开引擎配置窗口
 const btnconfig = document.getElementById('btnconfig')
