@@ -125,7 +125,7 @@ npm run make
 
 ### ollama大模型工具
 **需要本地化搭建**
-> wodict仅在qwen下测试。
+> 仅在通义千问qwen大模型下测试。
 
 介绍：https://ollama.com/
 1. 按照ollama网站安装说明安装ollama和自己的大模型，例如qwen。
