@@ -13,6 +13,7 @@ let cfgobj = {};
 let configWindow;
 let aboutWindow;
 let mainWindow_clone;
+let controller ;
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
@@ -92,7 +93,7 @@ function createWindow () {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
   });
   
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   //发送引擎列表到页面
   mainWindow.webContents.on('did-finish-load', () => {  
@@ -107,7 +108,8 @@ function createWindow () {
       if (cfgobj.autotranslate) {
         const engine_type = cfgobj.curengine;
         const engine = cfgobj[engine_type];
-        await translate.translate(text,engine_type,engine,mainWindow);
+        controller = new AbortController();
+        await translate.translate(text,engine_type,engine,mainWindow,controller);
       } else {                          
         result = {"origintext":text,"resulttext":"自动翻译功能未开启，开启后才能监测剪切板并翻译哦。"};
         mainWindow.webContents.send('update-text', result);
@@ -246,7 +248,8 @@ app.whenReady().then(() => {
       //console.log("translatorV2");
       const engine_type = cfgobj.curengine;
       const engine = cfgobj[engine_type];
-      await translate.translate(query,engine_type,engine,mainWindow_clone);
+      controller = new AbortController();
+      await translate.translate(query,engine_type,engine,mainWindow_clone,controller);
     });
 
     //打开引擎配置窗口
@@ -256,6 +259,14 @@ app.whenReady().then(() => {
     //打开关于窗口
     ipcMain.on('open-about', async (event) => {
       createAboutWindow();
+    });
+
+    //停止翻译
+    ipcMain.on('abort-translate', async (event) => {
+      if (controller) controller.abort();
+      console.log("abort-translate");
+      let result = {"origintext":"","resulttext":"翻译已停止","done":true};
+      mainWindow_clone.webContents.send('update-text', result);
     });
 
     //保存配置窗口的引擎配置

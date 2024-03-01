@@ -95,6 +95,13 @@ btnabout.addEventListener('click', async () => {
    await window.electronAPI.onAbout();
 })
 
+//停止翻译
+const btnabort = document.getElementById('btnabort')
+btnabort.addEventListener('click', async () => {
+   await window.electronAPI.onAbort();
+   console.log('btnabort click');
+})
+
 
 //捕获鼠标进出事件
 document.documentElement.addEventListener('mouseenter', (event) => {  

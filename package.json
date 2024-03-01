@@ -1,6 +1,6 @@
 {
   "name": "wodict",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "A translator based on Electron",
   "main": "main.js",
   "scripts": {
@@ -11,7 +11,8 @@
   "repository": "https://github.com/unclemcz/wodict",
   "keywords": [
     "Electron",
-    "dict"
+    "dict",
+    "translator"
   ],
   "author": "mcz",
   "license": "MIT",

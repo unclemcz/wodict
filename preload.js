@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onTranslatorV2: (query) => ipcRenderer.send('translatorV2',query),//渲染进程->主进程  替代translator
   onConfig:()=>ipcRenderer.invoke('open-config'),
   onAbout:()=>ipcRenderer.send('open-about'),
+  onAbort:()=>ipcRenderer.send('abort-translate'),
   onMouseAct: (mouse_event) => ipcRenderer.send('mouse-act', mouse_event),
 })
 

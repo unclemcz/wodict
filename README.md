@@ -13,7 +13,9 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 ## 效果
 ### 主面板
 ![wodict](./readme/screenshot1.gif)
-### 隐入左上角
+### 大模型
+![wodict](./readme/ollama.gif)
+### 左上角侧边吸附
 ![wodict](./readme/screenshot3.gif)
 ### 翻译通知
 ![wodict](./readme/screenshot2.gif)
