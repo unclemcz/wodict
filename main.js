@@ -231,7 +231,7 @@ app.whenReady().then(() => {
           }
         }        
       }else{
-        console.log("无需隐入，当前状态：",cfgobj.wininto);
+        //console.log("无需隐入，当前状态：",cfgobj.wininto);
       }
 
     });

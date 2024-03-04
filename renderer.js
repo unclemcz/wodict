@@ -8,7 +8,10 @@ const audiosource = document.getElementById('audiosource')
 const btnaudio = document.getElementById('btnaudio')
 window.electronAPI.onUpdateText((value) => {
   console.log("renderer.js onUpdateText:",value,value.done);
-  origintext.value = value.origintext.toString();
+  if (value.origintext && value.origintext.toString() != ''){
+    origintext.value = value.origintext.toString();    
+  }
+
   resulttext.value = value.resulttext.toString();
   if (value.voice && value.voice.toString() != '') {
     audiosource.setAttribute('src', value.voice.toString());

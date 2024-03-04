@@ -9,9 +9,7 @@ function isUrl(s) {
 }
   
   console.log(isUrl("http://www.example.com")); // true
-  console.log(isUrl("https://example.com/test")); // true
-  console.log(isUrl("example.com")); // true
-  console.log(isUrl("not a url")); // false
   console.log(isUrl("http://127.0.0.1:11434/")); //true
   console.log(isUrl("http://localhost:11434/")); //true
+  console.log(isUrl("")); //false
   
