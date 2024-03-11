@@ -27,7 +27,7 @@ const huaweikey = document.getElementById('huawei-key');
 const huaweiname = document.getElementById('huawei-name');
 
 const ollamaurl = document.getElementById('ollama-url');
-const ollamamodel = document.getElementById('ollama-model');
+//const ollamamodel = document.getElementById('ollama-model');
 const ollamaname = document.getElementById('ollama-name');
 
 
@@ -61,7 +61,7 @@ window.electronAPI.onEngineList((value) => {
           break;
         case "ollama":
           ollamaurl.value = value[key].url;
-          ollamamodel.value = value[key].model;
+          //ollamamodel.value = value[key].model;
           break;
         default:
             break;
@@ -80,7 +80,7 @@ btnsavecfg.addEventListener('click', async () => {
   cfg.alibase = {"name":alibasename.innerText,"appid":alibaseid.value,"key":alibasekey.value};
   cfg.volc = {"name":volcname.innerText,"appid":volcid.value,"key":volckey.value};
   cfg.huawei = {"name":huaweiname.innerText,"appid":huaweiid.value,"key":huaweikey.value};
-  cfg.ollama = {"name":ollamaname.innerText,"url":ollamaurl.value,"model":ollamamodel.value};
+  cfg.ollama = {"name":ollamaname.innerText,"url":ollamaurl.value};
   //console.log(cfg)
   window.electronAPI.onSaveCfg(cfg);
   window.close();

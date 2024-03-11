@@ -19,3 +19,7 @@ select{
     -webkit-app-region: no-drag;
 }
  */
+
+ .enginewidth{
+    min-width: 200px;
+  }

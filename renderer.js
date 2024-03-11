@@ -1,11 +1,14 @@
 
 
+
+const btntranslator = document.getElementById('btntranslator') //翻译按钮
+const origintext = document.getElementById('origintext')//源文本
+const resulttext = document.getElementById('resulttext') //翻译结果
+const audiosource = document.getElementById('audiosource') //声音源
+const btnaudio = document.getElementById('btnaudio')  //声音按钮
+const modelselect = document.getElementById('modelselect') //模型
+
 //翻译剪切板文本
-const btntranslator = document.getElementById('btntranslator')
-const origintext = document.getElementById('origintext')
-const resulttext = document.getElementById('resulttext')
-const audiosource = document.getElementById('audiosource')
-const btnaudio = document.getElementById('btnaudio')
 window.electronAPI.onUpdateText((value) => {
   console.log("renderer.js onUpdateText:",value,value.done);
   if (value.origintext && value.origintext.toString() != ''){
@@ -49,6 +52,29 @@ window.electronAPI.onEngineList((value) => {
       }
     }
   }
+  window.electronAPI.changeEngine(curengine);
+})
+
+
+//填充模型列表
+window.electronAPI.onModelList((value) => {
+  modelselect.options.length = 0;
+  if (value.length > 0) {
+    modelselect.hidden = false;
+    for (const key in value) {
+        let newOption = document.createElement('option');  
+        newOption.text = value[key]; // 设置文本  
+        newOption.value = value[key]; // 设置值  
+        if (key == 0) {
+          newOption.selected = true;
+        }
+        modelselect.add(newOption)
+        //console.log(key);
+    }
+  } else {
+    modelselect.hidden = true;
+  }
+
 })
 
 //切换翻译引擎
@@ -60,8 +86,16 @@ engineselect.addEventListener('change', function(event) {
   window.electronAPI.changeEngine(engine);
 });  
 
-//点击按钮翻译
+//切换模型
+modelselect.addEventListener('change', function(event) {  
+  let model = event.target.value; // 获取选中选项的值  
+  //let selectedOptionText = event.target.options[event.target.selectedIndex].text; // 获取选中选项的文本  
+  console.log('Selected model value:', model);  
+  //console.log('Selected option text:', selectedOptionText);  
+  window.electronAPI.changeModel(model);
+});  
 
+//点击按钮翻译
 btntranslator.addEventListener('click', async () => {
   if (origintext.value == '') {
     resulttext.value = '源语言为空。';

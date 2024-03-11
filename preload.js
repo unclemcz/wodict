@@ -11,7 +11,9 @@ const { contextBridge, ipcRenderer } = require('electron/renderer')
 contextBridge.exposeInMainWorld('electronAPI', {
   onUpdateText: (callback) => ipcRenderer.on('update-text', (_event, value) => callback(value)),
   onEngineList: (callback) => ipcRenderer.on('enginelist', (_event, value) => callback(value)),
+  onModelList: (callback) => ipcRenderer.on('modellist', (_event, value) => callback(value)),
   changeEngine: (engine) => ipcRenderer.send('change-engine', engine),
+  changeModel: (model) => ipcRenderer.send('change-model', model),
   onTranslator: (query) => ipcRenderer.invoke('translator',query),//双向  已停用
   onTranslatorV2: (query) => ipcRenderer.send('translatorV2',query),//渲染进程->主进程  替代translator
   onConfig:()=>ipcRenderer.invoke('open-config'),

@@ -137,7 +137,7 @@ function createConfigWindow() {
       //x:0, //left top
       //y:0,
       //resizable:false,
-      alwaysOnTop:true,
+      //alwaysOnTop:true,
       webPreferences: {
         preload: path.join(__dirname, 'preloadjs/config.js')
       }
@@ -165,7 +165,7 @@ function createAboutWindow() {
       //x:0, //left top
       //y:0,
       resizable:false,
-      alwaysOnTop:true,
+      //alwaysOnTop:true,
       webPreferences: {
         preload: path.join(__dirname, 'preloadjs/about.js')
       }
@@ -197,12 +197,29 @@ app.whenReady().then(() => {
     createWindow()
 
     //监控引擎变化并更新
-    ipcMain.on('change-engine', function (event, engine) {
+    ipcMain.on('change-engine', async function (event, engine) {
       console.log("ipcMain.on change-engine",engine);
       cfgobj.curengine = engine;
+      //cfg.cfgsave(cfgobj);
+      const type = engine;
+      const engine_t = cfgobj[engine];
+      //console.log('engine_t',type,engine_t);
+      const mlist = await translate.modellist(type,engine_t,mainWindow_clone);
+      //console.log(mlist);
+      if (mlist.length > 0) {
+        cfgobj[engine].model = mlist[0];
+      }
+      //console.log(cfgobj);
       cfg.cfgsave(cfgobj);
     });
 
+    //监控模型变化并更新
+    ipcMain.on('change-model', async function (event, model) {
+      console.log("ipcMain.on change-model",model);
+      let curengine = cfgobj.curengine;
+      cfgobj[curengine].model = model;
+      cfg.cfgsave(cfgobj);
+    });
 
     ipcMain.on('mouse-act', function (event, act) {
       if (cfgobj.wininto) {
