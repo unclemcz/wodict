@@ -4,7 +4,6 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 
 开发的初衷是做一个可以支持读取剪贴板字符进行翻译的小玩意，便于自己阅读文献。
 
-我在学习一门新技术的时候，都会边学边做一个小东西，wodict是在我学rust的时候开始计划做的小东西，经过几周精神折磨后，我放弃了。但我的需求还在，我需要一个方便我阅读各种文档的翻译辅助工具，所以我开始学electron，这次很顺利，感谢javascript的世界对我这种庸人如此宽容的接纳。
 
 ## 已在以下系统测试
 - 统信UOS家庭版V22.0 x86
@@ -132,121 +131,7 @@ npm run make
 介绍：https://ollama.com/
 1. 按照ollama网站安装说明安装ollama和自己的大模型，例如qwen。
 2. 确认ollama正常运行。
-3. 将url和对应模型填入配置中。url默认为`http://127.0.0.1:11434/`,模型可参考ollama的网站，例如`qwen`、`qwen:7b`等。
-
-
-
-## 增加引擎支持
-欢迎通过pr的方式增加翻译引擎支持，说明：
-1. 在lib/engine/下增加一个js文件，文件名建议为该引擎的公司名字，例如xxx.js，对外暴露一个translate()的异步函数。
-```
-async function translate(text,type,engine,win) {
-    //todo
-    //生成一个结果结构体 发送到win窗口
-}
-```
-**结构体格式**
-
-origintext: 原始文本
-
-resulttext: 翻译后的文本
-
-voice: 原始文本的语音合成文件链接（可选）
-
-done:标记翻译是否已完成，为了兼容ollama引入，true为完成，false为未完成，false时翻译按钮会变灰，true时翻译按钮会变亮（可选）
-```
-{
-    origintext:"",
-    resulttext:"",
-    voice:"",
-    done:""
-}
-```
-2. 修改~/.config/wodict/config.json，补充新引擎的秘钥信息。
-```
-# 普通翻译配置
-"xxx":{
-    "name":"xxxname",
-    "appid":"",
-    "key":""
-}
-# 大模型配置
-"xxx":{
-    "name":"xxxname",
-    "url":"",
-    "model":""
-}
-```
-3. 修改lib/engine/translate.js，添加对新引擎的支持。
-```
-const xxx = require('./xxx.js');
-
-async function translate(text,type,engine) {
-    let result = {};
-    if(type=="baidu"){
-        result = await baidu.translate(text,engine);
-    }else if(type=="xxx"){//
-        result = await xxx.translate(text,engine);
-    }else{
-        result = {"origintext":text,"resulttext":"当前选择的翻译引擎为["+type+"]，还未配置，请先配置翻译引擎参数。"};
-    }
-}
-```
-4. 配置页面新增引擎元素 ./html/config.html
-```
-<div class="col-12">
-<nav class="navbar bg-body-tertiary">
-    <div class="">
-    <svg width="24" height="24"><path></path></svg>
-    <label id="xxxx-name">xxxx翻译</label>
-    </div>
-</nav>
-</div>
-<div class="col-6">
-<input type="text" class="form-control" id="xxxx-id" placeholder="appid">
-</div>
-<div class="col-6">
-<input type="password" class="form-control" id="xxxx-key" placeholder="key">
-</div>  
-
-```
-5. 修改保存配置功能 ./rendererjs/config.js
-```
-//获取页面元素
-const xxxxid = document.getElementById('xxxx-id');
-const xxxxkey = document.getElementById('xxxx-key');
-const xxxxname = document.getElementById('xxxx-name');
-
-//显示到页面
-window.electronAPI.onEngineList((value) => {
-  for (const key in value) {
-    if (value[key].name) {
-      switch (key) {
-        //
-        case "volc":
-          xxxxid.value = value[key].appid;
-          xxxxkey.value = value[key].key;
-          break;
-        //
-        default:
-            break;
-      }
-    }
-  }
-})
-
-//保存翻译引擎配置
-const btnsavecfg = document.getElementById('btnsavecfg')
-btnsavecfg.addEventListener('click', async () => {
-  let cfg = {};
-  //
-  cfg.xxxx = {"name":xxxxname.innerText,"appid":xxxxid.value,"key":xxxxkey.value};
-  //
-  window.electronAPI.onSaveCfg(cfg);
-  window.close();
-})
-
-```
+3. 将url填入配置中。url默认为`http://127.0.0.1:11434/`,模型可参考ollama的网站，例如`qwen`、`qwen:7b`等。
 
 
 ## 还未支持的列表
