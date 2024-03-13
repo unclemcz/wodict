@@ -35,6 +35,7 @@ window.electronAPI.onUpdateText((value) => {
 const engineselect = document.getElementById('engineselect')
 window.electronAPI.onEngineList((value) => {
   engineselect.options.length = 0;
+  let selected = 0; //用来判断是否有项目被选中
   const curengine = value.curengine;
   for (const key in value) {
     if (value[key].name) {
@@ -44,6 +45,7 @@ window.electronAPI.onEngineList((value) => {
       if (value[key].key!='') {
         if (key == curengine) {
           newOption.selected = true;
+          selected = 1;
         }
         engineselect.add(newOption)
       }else{
@@ -52,7 +54,12 @@ window.electronAPI.onEngineList((value) => {
       }
     }
   }
-  window.electronAPI.changeEngine(curengine);
+  if (selected == 0) {  //如果未选中，默认选中ollama
+    window.electronAPI.changeEngine('ollama');
+  }else{
+    window.electronAPI.changeEngine(curengine);
+  }
+
 })
 
 
