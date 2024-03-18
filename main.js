@@ -109,13 +109,13 @@ function createWindow () {
         const engine_type = cfgobj.curengine;
         const engine = cfgobj[engine_type];
         controller = new AbortController();
-        await translate.translate(text,engine_type,engine,mainWindow,controller);
+        result = await translate.translate(text,engine_type,engine,mainWindow,controller);
       } else {                          
         result = {"origintext":text,"resulttext":"自动翻译功能未开启，开启后才能监测剪切板并翻译哦。"};
         mainWindow.webContents.send('update-text', result);
       }
       //通知显示，可配置
-      if (cfgobj.notification==true) {
+      if (cfgobj.notification==true && (result.resulttext!='model-api-stream') ) {
         new Notification({
           icon:'./lib/img/icon.png',
           silent:true,
