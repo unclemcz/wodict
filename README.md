@@ -136,6 +136,12 @@ npm run make
 2. 确认ollama正常运行。
 3. 将url填入配置中。url默认为`http://127.0.0.1:11434/`,模型可参考ollama的网站，例如`qwen`、`qwen:7b`等。
 
+### moonshot大模型
+
+介绍：https://platform.moonshot.cn/docs/intro
+1. 注册开通：https://platform.moonshot.cn/console/info
+2. 新建秘钥 https://platform.moonshot.cn/console/api-keys
+3. 将步骤2中生成的key填入配置中。
 
 ## 还未支持的列表
 
