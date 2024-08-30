@@ -137,6 +137,7 @@ npm run make
 3. 将url填入配置中。url默认为`http://127.0.0.1:11434/`,模型可参考ollama的网站，例如`qwen`、`qwen:7b`等。
 
 ### moonshot大模型
+**速率限制：https://platform.moonshot.cn/docs/pricing#充值与限速**
 
 介绍：https://platform.moonshot.cn/docs/intro
 1. 注册开通：https://platform.moonshot.cn/console/info

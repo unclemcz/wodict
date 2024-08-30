@@ -65,8 +65,10 @@ function createWindow () {
         tray.setImage(path.join(__dirname, 'lib/img/icon.png'));
       }
       menuItem.checked = cfgobj.autotranslate;
+      //menuItem.checked = false;
       //cfgobj.autotranslate = !cfgobj.autotranslate;
-      console.log("是否自动翻译",cfgobj.autotranslate);
+      tray.setContextMenu(contextMenu);
+      console.log("是否自动翻译",cfgobj.autotranslate,menuItem.checked);
     },  label: '自动翻译', type: 'checkbox',checked: cfgobj.autotranslate},
     {click:(menuItem)=>{
       if (cfgobj.wininto || cfgobj.wininto==true) {
@@ -78,11 +80,13 @@ function createWindow () {
         cfgobj.wininto=true;
       }
       //menuItem.checked = !cfgobj.wininto;
+      tray.setContextMenu(contextMenu);
       console.log("是否隐入",cfgobj.wininto,"menuItem.checked",menuItem.checked);
     },  label: '侧边吸附(左上角)', type: 'checkbox',checked: cfgobj.wininto},
     {click:(menuItem)=>{
       cfgobj.notification = !cfgobj.notification;
       menuItem.checked = cfgobj.notification;
+      tray.setContextMenu(contextMenu);
       console.log("是否翻译通知",cfgobj.notification);
     },  label: '翻译通知', type: 'checkbox',checked: cfgobj.notification},
     {click(){mainWindow.show();}, label: '显示窗口', type: 'normal' },
