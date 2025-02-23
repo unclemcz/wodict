@@ -16,6 +16,7 @@ window.electronAPI.onUpdateText((value) => {
   }
 
   resulttext.value = value.resulttext.toString();
+  resulttext.scrollTop = resulttext.scrollHeight;
   if (value.voice && value.voice.toString() != '') {
     audiosource.setAttribute('src', value.voice.toString());
     //btnaudio.style.display = '';
