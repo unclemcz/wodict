@@ -14,8 +14,8 @@ window.electronAPI.onUpdateText((value) => {
   if (value.origintext && value.origintext.toString() != ''){
     origintext.value = value.origintext.toString();    
   }
-
   resulttext.value = value.resulttext.toString();
+  //自动滚动
   resulttext.scrollTop = resulttext.scrollHeight;
   if (value.voice && value.voice.toString() != '') {
     audiosource.setAttribute('src', value.voice.toString());
