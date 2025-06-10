@@ -1,12 +1,11 @@
 # wodict
 
-wodict是一个基于electron开发的网络环境下泛用型翻译（词典）工具，支持通过配置的方式接入百度翻译开放平台、网易有道翻译等。支持的语言由翻译引擎决定，只要翻译引擎支持，对应的语言就能翻译，包括但不限于英文、日语、韩语等。
+wodict是一个基于electron开发的网络环境下泛用型翻译（词典）工具，支持通过配置的方式接入ollama、百度翻译开放平台、网易有道翻译等。支持的语言由翻译引擎决定，只要翻译引擎支持，对应的语言就能翻译，包括但不限于英文、日语、韩语等。
 
-开发的初衷是做一个可以支持读取剪贴板字符进行翻译的小玩意，便于自己阅读文献。
+开发的初衷是做一个可以支持读取剪贴板字符进行翻译的小玩意，便于自己阅读文献，现在也已支持百度OCR，可以截图翻译。
 
 
-## 已在以下系统测试
-> arm64下的安装包基于electron22与nodejs16，x86下的安装包基于electron28与nodejs20。
+## 最新版本已在以下系统测试
 - Ubuntu25.04 x86
 
 
@@ -19,6 +18,8 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 ![wodict](./readme/screenshot3.gif)
 ### 翻译通知
 ![wodict](./readme/screenshot2.gif)
+### OCR
+![wodict](./readme/baiduocr.gif)
 
 ## 安装
 
@@ -132,7 +133,7 @@ npm run make
 介绍：https://ollama.com/
 1. 按照ollama网站安装说明安装ollama和自己的大模型，例如qwen。
 2. 确认ollama正常运行。
-3. 将url填入配置中。url默认为`http://127.0.0.1:11434/`,模型可参考ollama的网站，例如`qwen`、`qwen:7b`等。
+3. 将url填入配置中。url默认为`http://127.0.0.1:11434/`,模型可参考ollama的网站，例如`qwen3`等。
 
 ### moonshot大模型
 **速率限制：https://platform.moonshot.cn/docs/pricing#充值与限速**
@@ -142,12 +143,11 @@ npm run make
 2. 新建秘钥 https://platform.moonshot.cn/console/api-keys
 3. 将步骤2中生成的key填入配置中。
 
-## 还未支持的列表
-
-### 微软Azure翻译
-### amazon
-### google
-### deepl
+### 百度OCR
+介绍： https://cloud.baidu.com/doc/OCR/s/dk3iqnq51
+1. 创建应用：https://console.bce.baidu.com/ai-engine/old/#/ai/ocr/app/list
+2. 获取AK/SK：已创建的应用会有AK（API Key）与SK（Secret Key）。
+3. 将步骤2中生成的AK/SK填入配置中。
 
 
 
