@@ -20,6 +20,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onAbout:()=>ipcRenderer.send('open-about'),
   onAbort:()=>ipcRenderer.send('abort-translate'),
   onMouseAct: (mouse_event) => ipcRenderer.send('mouse-act', mouse_event),
+  getSources: () => ipcRenderer.invoke('get-sources'),
+  captureScreen: (sourceId) =>ipcRenderer.send('capture-screen', sourceId),
+  send: (channel, data) => ipcRenderer.send(channel, data),
+  on: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args)),
 })
 
 

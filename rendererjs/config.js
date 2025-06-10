@@ -1,10 +1,14 @@
 
 
-//填充翻译引擎列表
+//填充配置列表
 
 const baiduid = document.getElementById('baidu-id');
 const baidukey = document.getElementById('baidu-key');
 const baiduname = document.getElementById('baidu-name');
+
+const baiduocrak = document.getElementById('baiduocr-ak');
+const baiduocrsk = document.getElementById('baiduocr-sk');
+const baiduocrname = document.getElementById('baiduocr-name');
 
 const youdaoid = document.getElementById('youdao-id');
 const youdaokey = document.getElementById('youdao-key');
@@ -41,6 +45,10 @@ window.electronAPI.onEngineList((value) => {
         case "baidu":
             baiduid.value = value[key].appid;
             baidukey.value = value[key].key;
+            break;
+        case "baiduocr":
+            baiduocrak.value = value[key].ak;
+            baiduocrsk.value = value[key].sk;
             break;
         case "youdao":
             youdaoid.value = value[key].appid;
@@ -81,6 +89,8 @@ const btnsavecfg = document.getElementById('btnsavecfg')
 btnsavecfg.addEventListener('click', async () => {
   let cfg = {};
   cfg.baidu = {"name":baiduname.innerText,"appid":baiduid.value,"key":baidukey.value};
+  cfg.baiduocr = {"name":baiduocrname.innerText,"ak":baiduocrak.value,"sk":baiduocrsk.value};
+  cfg.curocr = "baiduocr";
   cfg.youdao = {"name":youdaoname.innerText,"appid":youdaoid.value,"key":youdaokey.value};
   cfg.tencent = {"name":tencentname.innerText,"appid":tencentid.value,"key":tencentkey.value};
   cfg.alibase = {"name":alibasename.innerText,"appid":alibaseid.value,"key":alibasekey.value};

@@ -6,6 +6,7 @@ const origintext = document.getElementById('origintext')//源文本
 const resulttext = document.getElementById('resulttext') //翻译结果
 const audiosource = document.getElementById('audiosource') //声音源
 const btnaudio = document.getElementById('btnaudio')  //声音按钮
+const btncut = document.getElementById('btncut');//OCR按钮
 const modelselect = document.getElementById('modelselect') //模型
 
 //翻译剪切板文本
@@ -61,6 +62,12 @@ window.electronAPI.onEngineList((value) => {
     window.electronAPI.changeEngine(curengine);
   }
 
+  //判断btncut按钮是否可以使用
+  if (value.curocr&&value[value.curocr].ak!='') {
+    btncut.disabled = false;
+  }else{
+    btncut.disabled = true;
+  }
 })
 
 
@@ -171,3 +178,12 @@ btnaudio.addEventListener('click', async () => {
   }
 })
 
+
+
+document.getElementById('btncut').addEventListener('click', async () => {
+  try {
+    window.electronAPI.send('open-selection-window'); // 打开选区窗口
+  } catch (error) {
+    console.error('Error during screen capture:', error);
+  }
+});

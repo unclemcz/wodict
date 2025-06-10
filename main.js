@@ -1,8 +1,9 @@
 
 
-const { app, Menu, BrowserWindow,screen,Notification,Tray,ipcMain } = require('electron')
+const { app, Menu,clipboard,dialog, BrowserWindow,screen,desktopCapturer,Notification,Tray,ipcMain } = require('electron')
 const clipboardWatcher = require('electron-clipboard-watcher')
 const translate = require('./lib/engine/translate.js')
+const ocr = require('./lib/engine/ocr.js')
 const path = require('node:path')
 const cfg = require('./lib/engine/config.js')
 
@@ -129,6 +130,32 @@ function createWindow () {
       }
     }
   })
+}
+
+function createSelectionWindow() {
+  const displays = screen.getAllDisplays();
+  const primaryDisplay = displays.find(d => d.bounds.x === 0 && d.bounds.y === 0);
+
+  const { width, height } = primaryDisplay.size;
+
+  const selectionWindow = new BrowserWindow({
+    width,
+    height,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload-selection.js'),
+      contextIsolation: true,
+      //sandbox: true,
+    },
+  });
+
+  selectionWindow.loadFile('selection.html');
+  //selectionWindow.webContents.openDevTools();
+
+  return selectionWindow;
 }
 
 //翻译引擎配置窗口
@@ -302,6 +329,91 @@ app.whenReady().then(() => {
       }
       cfg.cfgsave(cfgobj);
       mainWindow_clone.webContents.send('enginelist', cfgobj);
+    });
+
+    // 截图功能   处理获取屏幕源的请求
+    ipcMain.handle('get-sources', async () => {
+      const sources = await desktopCapturer.getSources({ types: ['screen'] });
+      return sources.map((source) => ({
+        id: source.id,
+        name: source.name,
+        thumbnail: source.thumbnail.toDataURL(),
+      }));
+    });
+
+    // 注册 IPC 监听器以打开选区窗口
+    ipcMain.on('open-selection-window', () => {
+      createSelectionWindow(); // 调用创建全屏选区窗口的函数
+    });
+
+
+    ipcMain.on('selection-complete', async (event, { x, y, width, height }) => {
+        const fs = require('fs');
+        const path = require('path');
+        console.log(`截图区域: (x:${x}, y:${y}, width:${width}, height:${height})`);
+        if (width <= 0 || height <= 0) {
+            console.warn('无效的截图区域');
+            return;
+        }
+
+        const displays = screen.getAllDisplays();
+
+        // 查找当前点击所在的显示器
+        const display = displays.find(d =>
+            x >= d.bounds.x &&
+            y >= d.bounds.y &&
+            x < d.bounds.x + d.bounds.width &&
+            y < d.bounds.y + d.bounds.height
+        );
+
+        if (!display) {
+            console.error('无法找到截图所在的屏幕');
+            return;
+        }
+
+        console.log(`当前点击所在的显示器为：${display.id}`);
+        console.log(`显示器 bounds:`, display.bounds);
+
+        const sources = await desktopCapturer.getSources({ types: ['screen'],thumbnailSize:{ width: display.bounds.width, height: display.bounds.height } });
+
+        // 尝试匹配显示器源
+        const selectedSource = sources[0];
+
+        if (!selectedSource) {
+            console.error('未找到匹配的显示器源，请检查 source.name 是否符合格式或尝试其他显示器');
+            return;
+        }
+
+        // 获取完整屏幕截图的图像数据
+        const screenImage = selectedSource.thumbnail;
+
+        // 裁剪指定区域
+        const croppedImage = screenImage.crop({
+            x,
+            y,
+            width,
+            height
+        });
+
+        // 保存路径改为项目目录下的 ./tmp/
+        const tmpDir = path.join(__dirname, 'tmp');
+        if (!fs.existsSync(tmpDir)) {
+            fs.mkdirSync(tmpDir);
+        }
+
+        //const tmpPath64 = path.join(tmpDir, `screenshot-${Date.now()}.txt`);
+        //将croppedImage保存为base64
+        //console.log(tmpPath64);
+        //fs.writeFileSync(tmpPath64, croppedImage.toDataURL());
+        let curocr = cfgobj.curocr;
+        console.log('curocr',curocr);
+        try{
+          ocrtext = await ocr.ocr(croppedImage.toDataURL(),curocr,cfgobj[curocr]);
+          //将ocrtext拷贝到剪贴板，触发翻译动作
+          clipboard.writeText(ocrtext);
+        }catch(e){
+          dialog.showErrorBox('错误', "请检查百度OCR配置是否正确："+e.message);
+        }
     });
 
 

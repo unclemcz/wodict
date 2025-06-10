@@ -7,9 +7,7 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 
 ## 已在以下系统测试
 > arm64下的安装包基于electron22与nodejs16，x86下的安装包基于electron28与nodejs20。
-- Ubuntu24.04 x86
-- 统信UOS家庭版V22.0 x86
-- Kylin V10 aarch64
+- Ubuntu25.04 x86
 
 
 ## 效果

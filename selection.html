@@ -1,0 +1,37 @@
+<!-- selection.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Screen Selection</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+    #selectionOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      pointer-events: auto;
+    }
+    #selectionRect {
+      position: absolute;
+      border: 2px solid red;
+      pointer-events: none;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="selectionOverlay"></div>
+  <div id="selectionRect"></div>
+  <script src="selection.js"></script>
+</body>
+</html>
