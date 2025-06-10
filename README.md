@@ -144,6 +144,8 @@ npm run make
 3. 将步骤2中生成的key填入配置中。
 
 ### 百度OCR
+**每月1000次免费额度**
+
 介绍： https://cloud.baidu.com/doc/OCR/s/dk3iqnq51
 1. 创建应用：https://console.bce.baidu.com/ai-engine/old/#/ai/ocr/app/list
 2. 获取AK/SK：已创建的应用会有AK（API Key）与SK（Secret Key）。
