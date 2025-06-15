@@ -244,6 +244,13 @@ app.whenReady().then(() => {
       cfg.cfgsave(cfgobj);
     });
 
+    //监控OCR变化并更新
+    ipcMain.on('change-ocr', async function (event, ocr) {
+      console.log("ipcMain.on change-ocr",ocr);
+      cfgobj.curocr = ocr;
+      cfg.cfgsave(cfgobj);
+    });
+
     //监控模型变化并更新
     ipcMain.on('change-model', async function (event, model) {
       console.log("ipcMain.on change-model",model);
@@ -251,6 +258,8 @@ app.whenReady().then(() => {
       cfgobj[curengine].model = model;
       cfg.cfgsave(cfgobj);
     });
+
+ 
 
     ipcMain.on('mouse-act', function (event, act) {
       if (cfgobj.wininto) {
@@ -412,7 +421,7 @@ app.whenReady().then(() => {
           //将ocrtext拷贝到剪贴板，触发翻译动作
           clipboard.writeText(ocrtext);
         }catch(e){
-          dialog.showErrorBox('错误', "请检查百度OCR配置是否正确："+e.message);
+          dialog.showErrorBox('OCR抛出错误', e.message);
         }
     });
 

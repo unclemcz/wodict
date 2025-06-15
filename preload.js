@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onModelList: (callback) => ipcRenderer.on('modellist', (_event, value) => callback(value)),
   changeEngine: (engine) => ipcRenderer.send('change-engine', engine),
   changeModel: (model) => ipcRenderer.send('change-model', model),
+  changeOCR: (ocr) => ipcRenderer.send('change-ocr', ocr),
   onTranslator: (query) => ipcRenderer.invoke('translator',query),//双向  已停用
   onTranslatorV2: (query) => ipcRenderer.send('translatorV2',query),//渲染进程->主进程  替代translator
   onConfig:()=>ipcRenderer.invoke('open-config'),

@@ -151,6 +151,18 @@ npm run make
 2. 获取AK/SK：已创建的应用会有AK（API Key）与SK（Secret Key）。
 3. 将步骤2中生成的AK/SK填入配置中。
 
+### 微信OCR（本地）
+**效果还可以吧...**
+1. 用Docker部署以下服务：https://hub.docker.com/r/golangboyme/wxocr
+```
+# Pull the image
+docker pull golangboyme/wxocr
+
+# Run the container
+# http://localhost:5000/ocr
+docker run -d -p 5000:5000 --name wechat-ocr-api golangboyme/wxocr
+```
+2. 如果未使用默认的地址与端口，请在配置里填写。
 
 
 ## 隐私说明

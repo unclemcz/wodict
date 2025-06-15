@@ -31,12 +31,13 @@ const huaweikey = document.getElementById('huawei-key');
 const huaweiname = document.getElementById('huawei-name');
 
 const ollamaurl = document.getElementById('ollama-url');
-//const ollamamodel = document.getElementById('ollama-model');
 const ollamaname = document.getElementById('ollama-name');
 
 const kimikey = document.getElementById('kimi-key');
 const kiminame = document.getElementById('kimi-name');
 
+const wxocrurl = document.getElementById('wxocr-url');
+const wxocrname = document.getElementById('wxocr-name');
 
 window.electronAPI.onEngineList((value) => {
   for (const key in value) {
@@ -49,6 +50,9 @@ window.electronAPI.onEngineList((value) => {
         case "baiduocr":
             baiduocrak.value = value[key].ak;
             baiduocrsk.value = value[key].sk;
+            break;
+        case "wxocr":
+            wxocrurl.value = value[key].url;
             break;
         case "youdao":
             youdaoid.value = value[key].appid;
@@ -90,7 +94,6 @@ btnsavecfg.addEventListener('click', async () => {
   let cfg = {};
   cfg.baidu = {"name":baiduname.innerText,"appid":baiduid.value,"key":baidukey.value};
   cfg.baiduocr = {"name":baiduocrname.innerText,"ak":baiduocrak.value,"sk":baiduocrsk.value};
-  cfg.curocr = "baiduocr";
   cfg.youdao = {"name":youdaoname.innerText,"appid":youdaoid.value,"key":youdaokey.value};
   cfg.tencent = {"name":tencentname.innerText,"appid":tencentid.value,"key":tencentkey.value};
   cfg.alibase = {"name":alibasename.innerText,"appid":alibaseid.value,"key":alibasekey.value};
@@ -98,6 +101,7 @@ btnsavecfg.addEventListener('click', async () => {
   cfg.huawei = {"name":huaweiname.innerText,"appid":huaweiid.value,"key":huaweikey.value};
   cfg.ollama = {"name":ollamaname.innerText,"url":ollamaurl.value};
   cfg.kimi = {"name":kiminame.innerText,"key":kimikey.value};
+  cfg.wxocr = {"name":wxocrname.innerText,"url":wxocrurl.value};
   //console.log(cfg)
   window.electronAPI.onSaveCfg(cfg);
   window.close();

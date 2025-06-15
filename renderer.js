@@ -33,14 +33,18 @@ window.electronAPI.onUpdateText((value) => {
   }
 });
 
-//填充翻译引擎列表
+//填充翻译引擎列表&&OCR列表
 const engineselect = document.getElementById('engineselect')
+const ocrselect = document.getElementById('ocrselect')
 window.electronAPI.onEngineList((value) => {
+  console.log("window.electronAPI.onEngineList",value);
   engineselect.options.length = 0;
+  ocrselect.options.length = 0;
   let selected = 0; //用来判断是否有项目被选中
   const curengine = value.curengine;
+  const curocr = value.curocr;
   for (const key in value) {
-    if (value[key].name) {
+    if (value[key].name && (!value[key].name.includes('OCR'))) {
       let newOption = document.createElement('option');  
       newOption.text = value[key].name; // 设置文本  
       newOption.value = key; // 设置值  
@@ -54,6 +58,14 @@ window.electronAPI.onEngineList((value) => {
         newOption.disabled = true;
         engineselect.add(newOption)
       }
+    }else if(value[key].name && value[key].name.includes('OCR')){
+      let newOption = document.createElement('option');  
+      newOption.text = value[key].name; // 设置文本  
+      newOption.value = key; // 设置值  
+      if(key == curocr){
+        newOption.selected = true;
+      }
+      ocrselect.add(newOption);
     }
   }
   if (selected == 0) {  //如果未选中，默认选中ollama
@@ -109,6 +121,15 @@ modelselect.addEventListener('change', function(event) {
   //console.log('Selected option text:', selectedOptionText);  
   window.electronAPI.changeModel(model);
 });  
+
+//切换OCR
+ocrselect.addEventListener('change', function(event) {  
+  let ocr = event.target.value; // 获取选中选项的值  
+  //let selectedOptionText = event.target.options[event.target.selectedIndex].text; // 获取选中选项的文本  
+  console.log('Selected ocr value:', ocr);  
+  //console.log('Selected option text:', selectedOptionText);  
+  window.electronAPI.changeOCR(ocr);
+})
 
 //点击按钮翻译
 btntranslator.addEventListener('click', async () => {
