@@ -37,6 +37,7 @@ const kimikey = document.getElementById('kimi-key');
 const kiminame = document.getElementById('kimi-name');
 
 const wxocrurl = document.getElementById('wxocr-url');
+const wxocrkey = document.getElementById('wxocr-key');
 const wxocrname = document.getElementById('wxocr-name');
 
 window.electronAPI.onEngineList((value) => {
@@ -53,6 +54,7 @@ window.electronAPI.onEngineList((value) => {
             break;
         case "wxocr":
             wxocrurl.value = value[key].url;
+            wxocrkey.value = value[key].key;
             break;
         case "youdao":
             youdaoid.value = value[key].appid;
@@ -101,7 +103,7 @@ btnsavecfg.addEventListener('click', async () => {
   cfg.huawei = {"name":huaweiname.innerText,"appid":huaweiid.value,"key":huaweikey.value};
   cfg.ollama = {"name":ollamaname.innerText,"url":ollamaurl.value};
   cfg.kimi = {"name":kiminame.innerText,"key":kimikey.value};
-  cfg.wxocr = {"name":wxocrname.innerText,"url":wxocrurl.value};
+  cfg.wxocr = {"name":wxocrname.innerText,"url":wxocrurl.value,"key":wxocrkey.value};
   //console.log(cfg)
   window.electronAPI.onSaveCfg(cfg);
   window.close();

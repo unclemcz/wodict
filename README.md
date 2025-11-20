@@ -2,7 +2,7 @@
 
 wodict是一个基于electron开发的网络环境下泛用型翻译（词典）工具，支持通过配置的方式接入ollama、百度翻译开放平台、网易有道翻译等。支持的语言由翻译引擎决定，只要翻译引擎支持，对应的语言就能翻译，包括但不限于英文、日语、韩语等。
 
-开发的初衷是做一个可以支持读取剪贴板字符进行翻译的小玩意，便于自己阅读文献，现在也已支持百度OCR，可以截图翻译。
+开发的初衷是做一个可以支持读取剪贴板字符进行翻译的小玩意，便于自己阅读文献，现在也已支持百度OCR和本地部署的微信OCR，可以截图翻译。
 
 
 ## 最新版本已在以下系统测试
@@ -153,14 +153,13 @@ npm run make
 
 ### 微信OCR（本地）
 **效果还可以吧...**
-1. 用Docker部署以下服务：https://hub.docker.com/r/golangboyme/wxocr
+1. 部署以下服务：https://github.com/unclemcz/wxocr
 ```
-# Pull the image
-docker pull golangboyme/wxocr
+# 正常部署
+https://github.com/unclemcz/wxocr/blob/master/README.md
 
-# Run the container
-# http://localhost:5000/ocr
-docker run -d -p 5000:5000 --name wechat-ocr-api golangboyme/wxocr
+# Docker部署
+https://github.com/unclemcz/wxocr/blob/master/DOCKER.md
 ```
 2. 如果未使用默认的地址与端口，请在配置里填写。
 

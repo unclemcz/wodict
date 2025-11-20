@@ -1,6 +1,6 @@
 {
   "name": "wodict",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "description": "A translator based on Electron",
   "main": "main.js",
   "scripts": {
