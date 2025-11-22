@@ -18,8 +18,10 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 ![wodict](./readme/screenshot3.gif)
 ### 翻译通知
 ![wodict](./readme/screenshot2.gif)
-### OCR
+### 百度OCR
 ![wodict](./readme/baiduocr.gif)
+### wxocr
+![wodict](./readme/wxocr.gif)
 
 ## 安装
 
