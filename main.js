@@ -16,6 +16,7 @@ let aboutWindow;
 let mainWindow_clone;
 let controller ;
 
+
 function createWindow () {
   const mainWindow = new BrowserWindow({
     //frame: false,
@@ -29,13 +30,54 @@ function createWindow () {
     //y:-100,
     //resizable:false,
     alwaysOnTop:true,
+    // 允许窗口移出屏幕边界
+    skipTaskbar: false,
+    enableLargerThanScreen: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   });
   console.log('screen',screen.getPrimaryDisplay().workAreaSize.width);
   mainWindow_clone = mainWindow;
+
+  // 添加窗口移动事件监听
+  mainWindow.on('moved', () => {
+    const bounds = mainWindow.getBounds();
+    const { x, y, width, height } = bounds;
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const { width: screenWidth, height: screenHeight } = primaryDisplay.workArea;
+
+    console.log(`[窗口移动] 新位置: (${x}, ${y}), 大小: ${width}x${height}`);
+
+    // 检查是否窗口从边缘外移动到了屏幕内（用户手动拖拽）
+    const wasOutside = x < -50 || x > screenWidth + 50 || y < -50 || y > screenHeight + 50;
+    const isInside = x >= 0 && x <= screenWidth - width && y >= 0 && y <= screenHeight - height;
+
+    
+    // 检查是否接近边缘
+    const nearLeft = x < 10;
+    const nearRight = x + width > screenWidth - 10;
+    const nearTop = y < 10;
+    const nearBottom = y + height > screenHeight - 10;
+
+    console.log(`[窗口移动] 边缘状态: 左=${nearLeft}, 右=${nearRight}, 上=${nearTop}, 下=${nearBottom}`);
+
+    if (nearLeft || nearRight || nearTop || nearBottom) {
+      console.log(`[窗口移动] 窗口已移动到屏幕边缘附近，侧边吸附功能已激活`);
+    }
+  });
+
+  // 添加鼠标点击事件监听
+  mainWindow.on('focus', () => {
+    console.log(`[窗口事件] 窗口获得焦点 (鼠标点击)`);
+  });
+
+  mainWindow.on('blur', () => {
+    console.log(`[窗口事件] 窗口失去焦点`);
+  });
+
   mainWindow.on('close', (event) => {
+    console.log(`[窗口事件] 窗口关闭事件被触发`);
     mainWindow.hide();
     mainWindow.setSkipTaskbar(true);
     event.preventDefault();
@@ -71,20 +113,7 @@ function createWindow () {
       tray.setContextMenu(contextMenu);
       console.log("是否自动翻译",cfgobj.autotranslate,menuItem.checked);
     },  label: '自动翻译', type: 'checkbox',checked: cfgobj.autotranslate},
-    {click:(menuItem)=>{
-      if (cfgobj.wininto || cfgobj.wininto==true) {
-        cfgobj.wininto=false;
-        if (mainWindow.getBounds().x<0) {
-          mainWindow.setPosition(-5,0)
-        }
-      }else{
-        cfgobj.wininto=true;
-      }
-      //menuItem.checked = !cfgobj.wininto;
-      tray.setContextMenu(contextMenu);
-      console.log("是否隐入",cfgobj.wininto,"menuItem.checked",menuItem.checked);
-    },  label: '侧边吸附(左上角)', type: 'checkbox',checked: cfgobj.wininto},
-    {click:(menuItem)=>{
+        {click:(menuItem)=>{
       cfgobj.notification = !cfgobj.notification;
       menuItem.checked = cfgobj.notification;
       tray.setContextMenu(contextMenu);
@@ -146,13 +175,13 @@ function createSelectionWindow() {
     alwaysOnTop: true,
     skipTaskbar: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload-selection.js'),
+      preload: path.join(__dirname, 'preloadjs', 'preload-selection.js'),
       contextIsolation: true,
       //sandbox: true,
     },
   });
 
-  selectionWindow.loadFile('selection.html');
+  selectionWindow.loadFile('html/selection.html');
   //selectionWindow.webContents.openDevTools();
 
   return selectionWindow;
@@ -261,38 +290,8 @@ app.whenReady().then(() => {
 
  
 
-    ipcMain.on('mouse-act', function (event, act) {
-      if (cfgobj.wininto) {
-        let bound = mainWindow_clone.getBounds();
-        let pos_x = bound.x;
-        let pos_y = bound.y;
-        let width = bound.width;
-        let area_size = screen.getPrimaryDisplay().workAreaSize.width;
-        //console.log(JSON.stringify(event));
-        // console.log(act,"pos_x",pos_x,"pos_y",pos_y,"width",width,"area_size",area_size);
-        // console.log(bound);
-        // console.log(mainWindow_clone.getContentSize());
-        // console.log(mainWindow_clone.getContentBounds());
-        // console.log(mainWindow_clone.getSize())
   
-        // //console.log(act);
-        if (act=='mouseleave') {
-          if (pos_x<0) {
-            console.log("mouseleave setPosition")
-            mainWindow_clone.setPosition(0-width+5,0)
-          }
-        }else if(act=='mouseenter'){
-          if (pos_x<0) {
-            console.log("mouseenter setPosition")
-            mainWindow_clone.setPosition(-5,0)
-          }
-        }        
-      }else{
-        //console.log("无需隐入，当前状态：",cfgobj.wininto);
-      }
-
-    });
-
+    
     //监控翻译按钮并反馈结果 已停用
     ipcMain.handle('translator', async (event,query) => {
       const engine_type = cfgobj.curengine;

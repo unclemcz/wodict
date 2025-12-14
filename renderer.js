@@ -176,16 +176,6 @@ btnabort.addEventListener('click', async () => {
 })
 
 
-//捕获鼠标进出事件
-document.documentElement.addEventListener('mouseenter', (event) => {  
-  //console.log('鼠标进入了窗口');  
-  window.electronAPI.onMouseAct('mouseenter');
-});  
-
-document.documentElement.addEventListener('mouseleave', (event) => {  
-  //console.log('鼠标离开了窗口');  
-  window.electronAPI.onMouseAct('mouseleave');
-});
 
 
 //播放单词语音
