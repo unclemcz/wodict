@@ -33,7 +33,7 @@ function createWindow () {
     // 允许窗口移出屏幕边界
     skipTaskbar: false,
     enableLargerThanScreen: true,
-    webPreferences: {
+        webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   });
@@ -292,6 +292,7 @@ app.whenReady().then(() => {
 
   
     
+  
     //监控翻译按钮并反馈结果 已停用
     ipcMain.handle('translator', async (event,query) => {
       const engine_type = cfgobj.curengine;

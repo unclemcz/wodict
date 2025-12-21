@@ -176,8 +176,6 @@ btnabort.addEventListener('click', async () => {
 })
 
 
-
-
 //播放单词语音
 //const btnaudio = document.getElementById('btnaudio');
 const audioplayer = document.getElementById('audioplayer');
