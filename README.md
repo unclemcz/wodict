@@ -20,6 +20,8 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 ![wodict](./readme/baiduocr.gif)
 ### wxocr
 ![wodict](./readme/wxocr.gif)
+### glm-ocr
+![wodict](./readme/glmocr.webm)
 
 ## 安装
 
@@ -162,7 +164,7 @@ https://github.com/unclemcz/wxocr/blob/master/DOCKER.md
 2. 如果未使用默认的地址与端口，请在配置里填写。
 
 ### ollama模型OCR（本地）
-**已测试[glm-ocr](https://ollama.com/library/glm-ocr)模型，效果超群**
+**已测试[glm-ocr](https://ollama.com/library/glm-ocr)模型，识别效果超群**
 
 使用前请先通过ollama安装glm-ocr模型，并在wodict配置填写glm-ocr模型。
 ![ollama模型OCR](./readme/ollamaocrcfg.png)]
