@@ -40,6 +40,11 @@ const wxocrurl = document.getElementById('wxocr-url');
 const wxocrkey = document.getElementById('wxocr-key');
 const wxocrname = document.getElementById('wxocr-name');
 
+const ollamaocrurl = document.getElementById('ollamaocr-url');
+const ollamaocrmodel = document.getElementById('ollamaocr-model');
+const ollamaocrname = document.getElementById('ollamaocr-name');
+
+
 window.electronAPI.onEngineList((value) => {
   for (const key in value) {
     if (value[key].name) {
@@ -83,6 +88,10 @@ window.electronAPI.onEngineList((value) => {
         case "kimi":
           kimikey.value = value[key].key;
           break;
+        case "ollamaocr":
+          ollamaocrurl.value = value[key].url;
+          ollamaocrmodel.value = value[key].model;
+          break;
         default:
             break;
       }
@@ -104,6 +113,7 @@ btnsavecfg.addEventListener('click', async () => {
   cfg.ollama = {"name":ollamaname.innerText,"url":ollamaurl.value};
   cfg.kimi = {"name":kiminame.innerText,"key":kimikey.value};
   cfg.wxocr = {"name":wxocrname.innerText,"url":wxocrurl.value,"key":wxocrkey.value};
+  cfg.ollamaocr = {"name":ollamaocrname.innerText,"url":ollamaocrurl.value,"model":ollamaocrmodel.value};
   //console.log(cfg)
   window.electronAPI.onSaveCfg(cfg);
   window.close();

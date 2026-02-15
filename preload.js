@@ -10,8 +10,11 @@ const { contextBridge, ipcRenderer } = require('electron/renderer')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   onUpdateText: (callback) => ipcRenderer.on('update-text', (_event, value) => callback(value)),
+  //仅更新源语言，当ocr识别比较慢时，用该函数
+  onUpdateOriginText: (callback) => ipcRenderer.on('update-origin-text', (_event, value) => callback(value)),
   onEngineList: (callback) => ipcRenderer.on('enginelist', (_event, value) => callback(value)),
   onModelList: (callback) => ipcRenderer.on('modellist', (_event, value) => callback(value)),
+  onWriteToClipboard: (callback) => ipcRenderer.on('write-to-clipboard', (_event, text) => callback(text)),
   changeEngine: (engine) => ipcRenderer.send('change-engine', engine),
   changeModel: (model) => ipcRenderer.send('change-model', model),
   changeOCR: (ocr) => ipcRenderer.send('change-ocr', ocr),

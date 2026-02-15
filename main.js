@@ -417,7 +417,7 @@ app.whenReady().then(() => {
         let curocr = cfgobj.curocr;
         console.log('curocr',curocr);
         try{
-          ocrtext = await ocr.ocr(croppedImage.toDataURL(),curocr,cfgobj[curocr]);
+          ocrtext = await ocr.ocr(croppedImage.toDataURL(),curocr,cfgobj[curocr],mainWindow_clone);
           //将ocrtext拷贝到剪贴板，触发翻译动作
           clipboard.writeText(ocrtext);
         }catch(e){

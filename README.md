@@ -2,7 +2,7 @@
 
 wodict是一个基于electron开发的网络环境下泛用型翻译（词典）工具，支持通过配置的方式接入ollama、百度翻译开放平台、网易有道翻译等。支持的语言由翻译引擎决定，只要翻译引擎支持，对应的语言就能翻译，包括但不限于英文、日语、韩语等。
 
-开发的初衷是做一个可以支持读取剪贴板字符进行翻译的小玩意，便于自己阅读文献，现在也已支持百度OCR和本地部署的微信OCR，可以截图翻译。
+开发的初衷是做一个可以支持读取剪贴板字符进行翻译的小玩意，便于自己阅读文献，现在也已支持百度OCR、本地部署的微信OCR、ollama模型OCR，可以截图翻译。
 
 
 ## 最新版本已在以下系统测试
@@ -14,8 +14,6 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 ![wodict](./readme/screenshot1.gif)
 ### 大模型
 ![wodict](./readme/ollama.gif)
-### 左上角侧边吸附
-![wodict](./readme/screenshot3.gif)
 ### 翻译通知
 ![wodict](./readme/screenshot2.gif)
 ### 百度OCR
@@ -55,8 +53,6 @@ npm run make
 #### 自动翻译
 默认勾选，选中后会自动监测剪切板变化（复制操作），有变化则自动翻译复制的文本。
 
-#### 侧边吸附（左上角）
-默认不勾选，同样无法固化，如果需要固化，在配置文件改写这个属性（wininto:true）。
 
 #### 翻译通知
 默认不勾选，选中后会通过系统通知栏弹出翻译结果，这个设置是临时的，程序重启后会恢复到false，需要系统通知的话，每次都要设置一下。
@@ -164,6 +160,12 @@ https://github.com/unclemcz/wxocr/blob/master/README.md
 https://github.com/unclemcz/wxocr/blob/master/DOCKER.md
 ```
 2. 如果未使用默认的地址与端口，请在配置里填写。
+
+### ollama模型OCR（本地）
+**已测试[glm-ocr](https://ollama.com/library/glm-ocr)模型，效果超群**
+
+使用前请先通过ollama安装glm-ocr模型，并在wodict配置填写glm-ocr模型。
+![ollama模型OCR](./readme/ollamaocrcfg.png)]
 
 
 ## 隐私说明

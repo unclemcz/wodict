@@ -33,6 +33,26 @@ window.electronAPI.onUpdateText((value) => {
   }
 });
 
+//更新源语言文本框
+window.electronAPI.onUpdateOriginText((value) => {
+  console.log("renderer.js onUpdateOriginText:",value,value.done);
+  if (value.origintext && value.origintext.toString() != ''){
+    origintext.value = value.origintext.toString();
+  }
+  origintext.scrollTop = origintext.scrollHeight;
+});
+
+//监听剪切板写入请求
+window.electronAPI.onWriteToClipboard((text) => {
+  console.log('renderer.js onWriteToClipboard:', text);
+  navigator.clipboard.writeText(text).then(() => {
+    console.log('剪切板写入成功:', text);
+  }).catch(err => {
+    console.error('剪切板写入失败:', err);
+  });
+});
+
+
 //填充翻译引擎列表&&OCR列表
 const engineselect = document.getElementById('engineselect')
 const ocrselect = document.getElementById('ocrselect')
