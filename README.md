@@ -21,7 +21,7 @@ wodict是一个基于electron开发的网络环境下泛用型翻译（词典）
 ### wxocr
 ![wodict](./readme/wxocr.gif)
 ### glm-ocr
-![wodict](./readme/glmocr.webm)
+![wodict](./readme/glmocr.gif)
 
 ## 安装
 
